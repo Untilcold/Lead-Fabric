@@ -1964,28 +1964,16 @@ p {
   overflow: hidden;
 }
 
-.field-consent {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0.55rem;
-  align-items: start;
-}
-
-.field-consent input {
-  margin-top: 0.2rem;
-  width: 17px;
-  height: 17px;
-  accent-color: var(--blue);
-}
-
-.field-consent span {
-  font-size: 0.82rem;
+.form-note {
+  margin: 0.55rem 0 0;
+  font-size: 0.78rem;
   font-weight: 400;
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--muted-2);
+  text-align: center;
 }
 
-.field-consent a {
+.form-note a {
   color: var(--blue);
   text-decoration: underline;
 }
