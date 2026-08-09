@@ -1329,39 +1329,31 @@ p {
   box-shadow: 0 12px 40px rgba(15, 23, 42, 0.04);
 }
 
-.deliver-table {
+/* Настоящий скриншот рабочей таблицы вместо свёрстанной имитации */
+.deliver-shot {
+  /* Без этого ячейка сетки растягивается под ширину картинки в 1010px
+     и подпись под ней уезжает за край экрана. */
+  min-width: 0;
+  margin: 0;
   padding: 0.75rem 0.85rem 0.55rem;
   border-bottom: 1px solid var(--line);
   background: var(--white);
-  overflow-x: auto;
 }
 
-.deliver-table table {
+.deliver-shot-frame {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.deliver-shot-frame img {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 0.98rem;
+  height: auto;
+  display: block;
 }
 
-.deliver-table th {
-  text-align: left;
-  padding: 0.55rem 0.7rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  border-bottom: 1px solid var(--line);
-  white-space: nowrap;
-}
-
-.deliver-table td {
-  padding: 0.6rem 0.7rem;
-  border-bottom: 1px solid var(--line);
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.deliver-table tbody tr:last-child td {
-  border-bottom: 0;
+.deliver-swipe {
+  display: none;
 }
 
 .deliver-note {
@@ -1501,14 +1493,6 @@ p {
     border-color: var(--blue);
     box-shadow: 0 12px 28px rgba(37, 99, 235, 0.12);
   }
-}
-
-.deliver-table tbody tr {
-  transition: background-color 0.25s ease;
-}
-
-.deliver-table tbody tr:hover {
-  background: var(--blue-soft);
 }
 
 .after-icon {
@@ -2204,12 +2188,6 @@ p {
     grid-template-columns: 1fr;
   }
 
-  .deliver-table {
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-    overflow-x: auto;
-  }
-
   .deliver-points {
     grid-template-columns: 1fr 1fr;
   }
@@ -2353,25 +2331,36 @@ p {
     grid-template-columns: 1fr;
   }
 
-  .deliver-table th,
-  .deliver-table td {
-    padding: 0.7rem 0.5rem;
-    font-size: 0.95rem;
-  }
-
-  .deliver-table th {
-    font-size: 0.7rem;
-    letter-spacing: 0.04em;
-  }
-
-  /* Ключевые колонки — имя ребёнка и возраст — должны быть видны без прокрутки */
-  .deliver-table th,
-  .deliver-table td {
-    white-space: normal;
-  }
-
   .deliver-note {
     padding: 0 0.5rem;
+  }
+
+  /* На телефоне скриншот показываем в натуральную величину и листаем вбок —
+     ужатый до ширины экрана он превращается в нечитаемое пятно. */
+  .deliver-shot {
+    padding: 0.6rem 0.5rem 0.5rem;
+  }
+
+  .deliver-shot-frame {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .deliver-shot-frame::-webkit-scrollbar {
+    display: none;
+  }
+
+  .deliver-shot-frame img {
+    width: 1010px;
+    max-width: none;
+  }
+
+  .deliver-swipe {
+    display: inline;
+    color: var(--blue);
+    font-weight: 700;
+    white-space: nowrap;
   }
 
   .deliver-points {
