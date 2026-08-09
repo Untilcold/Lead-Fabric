@@ -933,7 +933,7 @@ p {
   height: 100%;
   min-height: 300px;
   transform-style: preserve-3d;
-  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 1.15s cubic-bezier(0.3, 0.9, 0.25, 1);
 }
 
 /* На тач-экранах Safari вешает :hover при скролле пальцем по карточке —
@@ -960,8 +960,8 @@ p {
 
 .flip-front {
   background:
-    radial-gradient(ellipse 75% 55% at 72% 18%, rgba(37, 99, 235, 0.38), transparent 62%),
-    linear-gradient(165deg, #111827 0%, #0f172a 55%, #172554 100%);
+    radial-gradient(ellipse 70% 55% at 74% 16%, rgba(255, 255, 255, 0.9), transparent 60%),
+    linear-gradient(165deg, #ffffff 0%, #eff6ff 48%, #dbeafe 100%);
 }
 
 /* Рисованная иллюстрация вместо фотографии */
@@ -977,7 +977,7 @@ p {
   width: min(82%, 200px);
   height: auto;
   display: block;
-  filter: drop-shadow(0 18px 28px rgba(2, 6, 23, 0.55));
+  filter: drop-shadow(0 14px 22px rgba(30, 58, 138, 0.22));
 }
 
 .flip-caption {
@@ -986,11 +986,11 @@ p {
   right: 0;
   bottom: 0;
   padding: 2.5rem 1.25rem 1.15rem;
-  color: var(--white);
+  color: var(--hero-dark);
   font-weight: 800;
   font-size: 1.35rem;
   letter-spacing: -0.03em;
-  background: linear-gradient(180deg, transparent, rgba(15, 23, 42, 0.78) 55%);
+  background: linear-gradient(180deg, rgba(219, 234, 254, 0), rgba(219, 234, 254, 0.92) 52%, #cfe0fd 100%);
 }
 
 .flip-back {
@@ -1065,8 +1065,8 @@ p {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.92);
-  opacity: 0.85;
+  background: rgba(37, 99, 235, 0.14);
+  opacity: 1;
   transition: opacity 0.3s ease;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M4 9a8 8 0 0 1 13.6-4.6L20 7'/%3E%3Cpath d='M20 3v4h-4'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -1085,7 +1085,8 @@ p {
 }
 
 /* Точки карусели — только на мобильном, где карточки едут вбок */
-.flip-dots {
+.flip-dots,
+.review-dots {
   display: none;
 }
 
@@ -2400,8 +2401,43 @@ p {
     max-width: none;
   }
 
+  /* Отзывы тоже едут вбок — четыре скриншота не растягивают страницу */
   .review-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 82%;
+    gap: 0.75rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-inline: -1rem;
+    padding: 0.25rem 1rem 0.5rem;
+    scroll-padding-inline: 1rem;
+  }
+
+  .review-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .review-card {
+    scroll-snap-align: center;
+  }
+
+  .review-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+  }
+
+  .review-dots .flip-dot {
+    background: rgba(37, 99, 235, 0.28);
+  }
+
+  .review-dots .flip-dot.is-active {
+    background: var(--blue);
   }
 
   /* Преимущества — карусель вбок, соседняя карточка выглядывает из-за края */

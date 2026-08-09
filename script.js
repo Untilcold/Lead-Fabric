@@ -177,26 +177,28 @@
     });
   });
 
-  /* Точки под каруселью преимуществ (видны только на узких экранах) */
-  const flipGrid = document.getElementById("benefits-grid");
-  const dotsBox = document.getElementById("benefits-dots");
-  if (flipGrid && dotsBox) {
-    const cards = Array.from(flipGrid.querySelectorAll(".flip-card"));
+  /* Точки под каруселями преимуществ и отзывов (видны только на узких экранах) */
+  const buildDots = (gridId, dotsId, itemSelector, label) => {
+    const grid = document.getElementById(gridId);
+    const dotsBox = document.getElementById(dotsId);
+    if (!grid || !dotsBox) return;
+
+    const cards = Array.from(grid.querySelectorAll(itemSelector));
     const dots = cards.map((card, index) => {
       const dot = document.createElement("button");
       dot.type = "button";
       dot.className = "flip-dot" + (index === 0 ? " is-active" : "");
-      dot.setAttribute("aria-label", `Преимущество ${index + 1}`);
+      dot.setAttribute("aria-label", `${label} ${index + 1}`);
       dot.addEventListener("click", () => {
-        const shift = card.getBoundingClientRect().left - flipGrid.getBoundingClientRect().left;
-        flipGrid.scrollTo({ left: flipGrid.scrollLeft + shift - 16, behavior: "smooth" });
+        const shift = card.getBoundingClientRect().left - grid.getBoundingClientRect().left;
+        grid.scrollTo({ left: grid.scrollLeft + shift - 16, behavior: "smooth" });
       });
       dotsBox.appendChild(dot);
       return dot;
     });
 
     const syncDots = () => {
-      const box = flipGrid.getBoundingClientRect();
+      const box = grid.getBoundingClientRect();
       const middle = box.left + box.width / 2;
       let nearest = 0;
       let best = Infinity;
@@ -211,8 +213,11 @@
       dots.forEach((dot, index) => dot.classList.toggle("is-active", index === nearest));
     };
 
-    flipGrid.addEventListener("scroll", syncDots, { passive: true });
-  }
+    grid.addEventListener("scroll", syncDots, { passive: true });
+  };
+
+  buildDots("benefits-grid", "benefits-dots", ".flip-card", "Преимущество");
+  buildDots("review-grid", "review-dots", ".review-card", "Отзыв");
 
   /* Rolling odometers — real site stats only */
   function buildOdometer(el) {
