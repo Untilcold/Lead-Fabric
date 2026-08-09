@@ -280,6 +280,7 @@
       student: document.getElementById("calc-student"),
       be: document.getElementById("calc-be"),
       beLabel: document.getElementById("calc-be-label"),
+      percent: document.getElementById("calc-percent"),
       cta: document.getElementById("calc-cta"),
     };
 
@@ -339,6 +340,13 @@
       if (out.student) out.student.innerHTML = rub(studentValue);
       if (out.be) out.be.textContent = String(breakEven);
       if (out.beLabel) out.beLabel.textContent = `${studentsWord(breakEven)} партию`;
+      if (out.percent) {
+        // «1 ученик» звучит как рекламный трюк, а «2% от партии» — как
+        // выполнимая задача. Показываем одно и то же двумя способами.
+        const share = (breakEven / contacts) * 100;
+        const rounded = share < 10 ? Math.round(share * 10) / 10 : Math.round(share);
+        out.percent.textContent = `${String(rounded).replace(".", ",")}%`;
+      }
       if (out.cta) {
         out.cta.textContent = `Обсудить партию на ${contacts} ${contactsWord(contacts)}`;
       }

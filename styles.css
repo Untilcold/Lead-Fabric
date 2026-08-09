@@ -428,7 +428,7 @@ p {
   font-size: clamp(1.2rem, 2.2vw, 1.45rem);
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: #93c5fd;
+  color: var(--white);
 }
 
 .hero h1 {
@@ -1646,8 +1646,20 @@ p {
   font-weight: 600;
 }
 
+.calc-share {
+  margin: 0.9rem 0 0;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.calc-share b {
+  color: var(--blue);
+  font-weight: 800;
+}
+
 .calc-note {
-  margin: 1.15rem 0 0;
+  margin: 0.7rem 0 0;
   color: var(--muted);
   font-size: 0.88rem;
   max-width: 62ch;
@@ -2029,7 +2041,8 @@ p {
   color: var(--muted-2);
 }
 
-.field input {
+.field input,
+.field select {
   width: 100%;
   min-height: 48px;
   padding: 0.7rem 0.9rem;
@@ -2042,7 +2055,18 @@ p {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.field input:focus {
+.field select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.4rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 18px 18px;
+}
+
+.field input:focus,
+.field select:focus {
   border-color: var(--blue);
   box-shadow: 0 0 0 3px rgba(65, 134, 245, 0.18);
 }
