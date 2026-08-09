@@ -751,30 +751,17 @@ p {
 }
 
 /* Counter */
+/* Раньше здесь были две дуги-полукружия — единственное такое место на сайте.
+   Теперь фон как у остальных светлых секций: подсветка плюс градиент. */
 .counter-section {
   position: relative;
   padding: 5.5rem 0 5rem;
-  background: var(--white);
+  background:
+    radial-gradient(ellipse 75% 55% at 12% 0%, rgba(37, 99, 235, 0.1), transparent 55%),
+    linear-gradient(180deg, #ffffff 0%, #f0f7ff 100%);
+  border-top: 1px solid #e8eef8;
+  border-bottom: 1px solid #dbeafe;
   overflow: hidden;
-}
-
-.counter-band {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 56px;
-}
-
-.counter-band--blue {
-  top: 0;
-  background: var(--blue);
-  border-radius: 0 0 40% 40% / 0 0 100% 100%;
-}
-
-.counter-band--soft {
-  bottom: 0;
-  background: var(--blue-soft);
-  border-radius: 40% 40% 0 0 / 100% 100% 0 0;
 }
 
 .counter-inner {
@@ -1419,6 +1406,15 @@ p {
   color: var(--muted-2);
   font-size: 0.82rem;
   line-height: 1.3;
+}
+
+/* Сотрудничество — был плоский белый фон, единственная секция без оформления */
+.section-process {
+  background:
+    radial-gradient(ellipse 70% 55% at 88% 0%, rgba(37, 99, 235, 0.1), transparent 55%),
+    linear-gradient(180deg, #f4f8ff 0%, #ffffff 62%);
+  border-top: 1px solid #dbeafe;
+  border-bottom: 1px solid #e8eef8;
 }
 
 /* После передачи */
