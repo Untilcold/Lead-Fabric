@@ -27,8 +27,21 @@
     }
   };
 
+  // Обработчик читает геометрию страницы. Без ограничения он делал это на
+  // каждое событие прокрутки — во встроенном браузере Telegram это заметно
+  // подтормаживало скролл. Теперь не чаще одного раза на кадр.
+  let scrollQueued = false;
+  const onScrollThrottled = () => {
+    if (scrollQueued) return;
+    scrollQueued = true;
+    requestAnimationFrame(() => {
+      scrollQueued = false;
+      onScroll();
+    });
+  };
+
   onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("scroll", onScrollThrottled, { passive: true });
 
   if (toggle && header) {
     toggle.addEventListener("click", () => {
