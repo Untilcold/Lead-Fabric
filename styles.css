@@ -313,8 +313,19 @@ p {
   pointer-events: none;
 }
 
-.btn-shimmer:hover::before {
-  transform: translateX(120%);
+/* Только для мыши. На айфоне Safari включает :hover, когда палец проезжает
+   по элементу при скролле, — блик запускался и залипал белой полосой
+   поверх плавающей кнопки Telegram. */
+@media (hover: hover) and (pointer: fine) {
+  .btn-shimmer:hover::before {
+    transform: translateX(120%);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .btn-shimmer::before {
+    display: none;
+  }
 }
 
 .btn-primary:hover {
@@ -820,106 +831,24 @@ p {
   line-height: 1.5;
 }
 
-/* Раньше здесь были две дуги-полукружия — единственное такое место на сайте.
-   Теперь фон как у остальных светлых секций: подсветка плюс градиент. */
-.counter-section {
-  position: relative;
-  padding: 5.5rem 0 5rem;
-  background:
-    radial-gradient(ellipse 75% 55% at 12% 0%, rgba(37, 99, 235, 0.1), transparent 55%),
-    linear-gradient(180deg, #ffffff 0%, #f0f7ff 100%);
-  border-top: 1px solid #e8eef8;
-  border-bottom: 1px solid #dbeafe;
-  overflow: hidden;
+/* Сюда переехала география из удалённого блока «Опыт» */
+.ongoing-geo {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  max-width: 56ch;
+  margin: 1.5rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 1rem;
+  line-height: 1.45;
 }
 
-.counter-inner {
-  position: relative;
-  z-index: 1;
-  text-align: left;
-}
-
-.counter-heading {
-  max-width: 18ch;
-  margin-bottom: 2rem;
-}
-
-.counter-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.counter-stat {
-  background: var(--white);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  padding: 1.4rem 1.1rem;
-  text-align: left;
-}
-
-.counter-stat-value {
-  color: var(--blue);
-  font-size: clamp(2.2rem, 4vw, 3rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  margin-bottom: 0.65rem;
-}
-
-.counter-stat-label {
-  color: var(--muted-2);
-  font-size: 1.02rem;
-  font-weight: 600;
-  line-height: 1.35;
-}
-
-.counter-stat--text {
-  background: var(--blue-soft);
-  border-color: transparent;
-}
-
-.counter-stat-value--text {
-  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-}
-
-.odometer {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.06em;
-  vertical-align: baseline;
-}
-
-.odo-digit {
-  display: inline-block;
-  height: 1.15em;
-  overflow: hidden;
-  position: relative;
-  width: 0.62em;
-}
-
-.odo-digit.is-space {
-  width: 0.28em;
-}
-
-.odo-suffix {
-  display: inline-block;
-  margin-left: 0.05em;
-}
-
-.odo-reel {
-  display: block;
-  transition: transform 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-  will-change: transform;
-}
-
-.odo-reel span {
-  display: block;
-  height: 1.15em;
-  line-height: 1.15em;
-  text-align: center;
+.ongoing-geo svg {
+  flex: 0 0 auto;
+  margin-top: 0.15rem;
+  color: #bfdbfe;
 }
 
 /* Benefits / flip cards */
@@ -2292,8 +2221,7 @@ p {
 @media (max-width: 900px) {
 
   .flip-grid,
-  .review-grid,
-  .counter-grid {
+  .review-grid {
     grid-template-columns: 1fr 1fr;
   }
 
@@ -2429,14 +2357,6 @@ p {
   .benefits,
   .section {
     padding: 3rem 0;
-  }
-
-  .counter-section {
-    padding: 4.25rem 0 3.75rem;
-  }
-
-  .counter-grid {
-    grid-template-columns: 1fr;
   }
 
   .deliver-note {
