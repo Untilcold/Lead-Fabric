@@ -315,7 +315,8 @@
       beLabel: document.getElementById("calc-be-label"),
     };
 
-    const rub = (value) => `${Math.round(value).toLocaleString("ru-RU")} ₽`;
+    const rub = (value) =>
+      `${Math.round(value).toLocaleString("ru-RU")} <span class="rub">₽</span>`;
 
     const read = (el, fallback) => {
       const value = Number(el && el.value);
@@ -348,8 +349,10 @@
       const studentValue = fee * months;
       const breakEven = Math.ceil(batchCost / studentValue);
 
-      if (out.cost) out.cost.textContent = rub(batchCost);
-      if (out.student) out.student.textContent = rub(studentValue);
+      // innerHTML — из-за <span class="rub"> вокруг знака рубля. Внутрь
+      // подставляются только числа, посторонней разметке взяться неоткуда.
+      if (out.cost) out.cost.innerHTML = rub(batchCost);
+      if (out.student) out.student.innerHTML = rub(studentValue);
       if (out.be) out.be.textContent = String(breakEven);
       if (out.beLabel) out.beLabel.textContent = `${studentsWord(breakEven)} партию`;
     };

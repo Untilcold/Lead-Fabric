@@ -484,9 +484,13 @@ p {
   line-height: 1.25;
 }
 
-.channel-tab:hover {
-  background: rgba(255, 255, 255, 0.16);
-  transform: translateX(3px);
+/* Только для мыши: на тач-экране Safari оставляет :hover после нажатия,
+   и активная вкладка залипала тёмной вместо белой до следующего свайпа. */
+@media (hover: hover) and (pointer: fine) {
+  .channel-tab:not(.is-active):hover {
+    background: rgba(255, 255, 255, 0.16);
+    transform: translateX(3px);
+  }
 }
 
 .channel-tab.is-active {
@@ -617,6 +621,8 @@ p {
 .channel-mock--ads {
   align-items: flex-end;
   gap: 0.55rem;
+  /* Место сверху под ярлык «цена рекламы» — иначе столбики лезут под него */
+  padding-top: 2.15rem;
   padding-bottom: 1.15rem;
   position: relative;
 }
@@ -624,7 +630,7 @@ p {
 .channel-mock-bar {
   width: 18px;
   height: calc(var(--h, 50%) * 0.85);
-  min-height: 28px;
+  min-height: 18px;
   border-radius: 6px 6px 2px 2px;
   background: #93c5fd;
 }
@@ -934,6 +940,9 @@ p {
   min-height: 300px;
   transform-style: preserve-3d;
   transition: transform 1.15s cubic-bezier(0.3, 0.9, 0.25, 1);
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 /* На тач-экранах Safari вешает :hover при скролле пальцем по карточке —
@@ -973,11 +982,12 @@ p {
   padding: 1.6rem 1.25rem 4.6rem;
 }
 
+/* Без CSS-фильтра: на айфоне тень у картинки внутри 3D-переворота
+   вылезала серым квадратом на долю секунды. Тень нарисована внутри SVG. */
 .flip-art svg {
   width: min(82%, 200px);
   height: auto;
   display: block;
-  filter: drop-shadow(0 14px 22px rgba(30, 58, 138, 0.22));
 }
 
 .flip-caption {
@@ -994,8 +1004,8 @@ p {
 }
 
 .flip-back {
-  background: linear-gradient(165deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%);
-  color: var(--white);
+  background: linear-gradient(165deg, #dbeafe 0%, #bfdbfe 55%, #93c5fd 100%);
+  color: var(--hero-dark);
   transform: rotateY(180deg);
   padding: 1.5rem 1.4rem 1.35rem;
   display: flex;
@@ -1049,7 +1059,7 @@ p {
 }
 
 .flip-back-text {
-  color: rgba(255, 255, 255, 0.82);
+  color: #1e3a8a;
   font-size: 1.05rem;
   line-height: 1.45;
   font-weight: 600;
@@ -1714,6 +1724,13 @@ p {
   font-size: 0.92rem;
 }
 
+/* Знака ₽ нет в подключённом Manrope, он берётся из системного шрифта
+   и рядом с жирными цифрами смотрится тяжелее их. Облегчаем. */
+.rub {
+  font-weight: 500;
+  font-size: 0.86em;
+}
+
 .price-value {
   color: var(--white);
   font-size: clamp(3.2rem, 8vw, 4.4rem);
@@ -2106,11 +2123,6 @@ p {
     padding: 0.65rem 1.05rem 0.8rem 0.55rem;
   }
 
-  .channel-tab:hover {
-    transform: none;
-    background: rgba(17, 24, 39, 0.32);
-  }
-
   /* Полоска отсчёта до следующей вкладки — только пока идёт автопрокрутка */
   .channel-tabs.is-auto .channel-tab.is-active::after {
     content: "";
@@ -2156,6 +2168,14 @@ p {
     margin-bottom: 0.85rem;
     min-height: 92px;
     padding: 0.8rem;
+  }
+
+  /* Выше остальных картинок: ярлык съедает верх, столбикам нужен запас,
+     иначе рост цены превращается в четыре одинаковых палочки. */
+  .channel-mock--ads {
+    min-height: 124px;
+    padding-top: 2rem;
+    padding-bottom: 0.9rem;
   }
 
   .channel-visual ul {
@@ -2347,13 +2367,58 @@ p {
     border-radius: 28px;
   }
 
+  /* Калькулятор должен умещаться в один экран телефона: поля в два столбца,
+     итоги — строкой «значение — подпись» вместо двух этажей. */
   .calc {
-    padding: 1.35rem 1.15rem;
+    padding: 1.25rem 1rem;
   }
 
-  .calc-fields,
+  .calc-title {
+    font-size: 1.2rem;
+  }
+
+  .calc-lead {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .calc-fields {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+  }
+
+  .calc-field span {
+    font-size: 0.8rem;
+    line-height: 1.25;
+  }
+
+  .calc-field input {
+    min-height: 44px;
+    padding: 0.55rem 0.7rem;
+  }
+
   .calc-out {
     grid-template-columns: 1fr;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .calc-stat {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.6rem;
+    padding: 0.7rem 0.9rem;
+  }
+
+  .calc-label {
+    font-size: 0.85rem;
+    text-align: right;
+  }
+
+  .calc-note {
+    margin-top: 0.9rem;
+    font-size: 0.83rem;
   }
 
   h1 {
