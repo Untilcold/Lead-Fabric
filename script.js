@@ -63,22 +63,90 @@
   }
 
   /* Channel tabs */
-  const tabs = document.querySelectorAll(".channel-tab");
-  const panels = document.querySelectorAll(".channel-panel");
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const id = tab.getAttribute("data-tab");
-      tabs.forEach((t) => {
-        t.classList.toggle("is-active", t === tab);
-        t.setAttribute("aria-selected", t === tab ? "true" : "false");
-      });
-      panels.forEach((panel) => {
-        const active = panel.getAttribute("data-panel") === id;
-        panel.classList.toggle("is-active", active);
-        panel.hidden = !active;
+  const tabsList = document.querySelector(".channel-tabs");
+  const tabs = Array.from(document.querySelectorAll(".channel-tab"));
+  const panels = Array.from(document.querySelectorAll(".channel-panel"));
+
+  /** Держит активную вкладку в видимой части ленты, не двигая саму страницу. */
+  const centerTab = (tab) => {
+    if (!tabsList || tabsList.scrollWidth <= tabsList.clientWidth) return;
+    const left = tab.offsetLeft - (tabsList.clientWidth - tab.offsetWidth) / 2;
+    tabsList.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
+  };
+
+  const activateTab = (tab) => {
+    const id = tab.getAttribute("data-tab");
+    tabs.forEach((t) => {
+      t.classList.toggle("is-active", t === tab);
+      t.setAttribute("aria-selected", t === tab ? "true" : "false");
+    });
+    panels.forEach((panel) => {
+      const active = panel.getAttribute("data-panel") === id;
+      panel.classList.toggle("is-active", active);
+      panel.hidden = !active;
+    });
+    centerTab(tab);
+  };
+
+  /* Автопрокрутка вкладок на узких экранах: пять этапов показываются сами,
+     листать страницу вверх-вниз не нужно. Первое касание её выключает. */
+  if (tabsList && tabs.length) {
+    const DWELL = 5200;
+    const narrow = window.matchMedia("(max-width: 900px)");
+    const calmMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let timer = null;
+    let inView = false;
+    let userTook = false;
+
+    const stopAuto = () => {
+      if (timer) clearInterval(timer);
+      timer = null;
+      tabsList.classList.remove("is-auto");
+    };
+
+    const startAuto = () => {
+      if (timer || userTook || !inView || !narrow.matches || calmMotion.matches) return;
+      tabsList.classList.add("is-auto");
+      timer = setInterval(() => {
+        const current = tabs.findIndex((t) => t.classList.contains("is-active"));
+        activateTab(tabs[(current + 1) % tabs.length]);
+      }, DWELL);
+    };
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        userTook = true;
+        stopAuto();
+        activateTab(tab);
       });
     });
-  });
+
+    tabsList.addEventListener("touchstart", () => {
+      userTook = true;
+      stopAuto();
+    }, { passive: true });
+
+    if ("IntersectionObserver" in window) {
+      const tabsObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            inView = entry.isIntersecting;
+            if (inView) startAuto();
+            else stopAuto();
+          });
+        },
+        { threshold: 0.3 }
+      );
+      tabsObserver.observe(tabsList);
+    }
+
+    narrow.addEventListener("change", () => {
+      stopAuto();
+      startAuto();
+    });
+  } else {
+    tabs.forEach((tab) => tab.addEventListener("click", () => activateTab(tab)));
+  }
 
   /* Benefits split-in + flip cards */
   const benefitsSection = document.getElementById("benefits");
@@ -108,6 +176,43 @@
       card.classList.toggle("is-flipped");
     });
   });
+
+  /* Точки под каруселью преимуществ (видны только на узких экранах) */
+  const flipGrid = document.getElementById("benefits-grid");
+  const dotsBox = document.getElementById("benefits-dots");
+  if (flipGrid && dotsBox) {
+    const cards = Array.from(flipGrid.querySelectorAll(".flip-card"));
+    const dots = cards.map((card, index) => {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "flip-dot" + (index === 0 ? " is-active" : "");
+      dot.setAttribute("aria-label", `Преимущество ${index + 1}`);
+      dot.addEventListener("click", () => {
+        const shift = card.getBoundingClientRect().left - flipGrid.getBoundingClientRect().left;
+        flipGrid.scrollTo({ left: flipGrid.scrollLeft + shift - 16, behavior: "smooth" });
+      });
+      dotsBox.appendChild(dot);
+      return dot;
+    });
+
+    const syncDots = () => {
+      const box = flipGrid.getBoundingClientRect();
+      const middle = box.left + box.width / 2;
+      let nearest = 0;
+      let best = Infinity;
+      cards.forEach((card, index) => {
+        const rect = card.getBoundingClientRect();
+        const distance = Math.abs(rect.left + rect.width / 2 - middle);
+        if (distance < best) {
+          best = distance;
+          nearest = index;
+        }
+      });
+      dots.forEach((dot, index) => dot.classList.toggle("is-active", index === nearest));
+    };
+
+    flipGrid.addEventListener("scroll", syncDots, { passive: true });
+  }
 
   /* Rolling odometers — real site stats only */
   function buildOdometer(el) {
