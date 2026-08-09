@@ -10,22 +10,46 @@
   const mobileCta = document.getElementById("mobile-cta");
   const contactSection = document.getElementById("contact");
 
+  // Близость блока контактов считает наблюдатель, а не замер на каждом кадре:
+  // getBoundingClientRect во время прокрутки заставляет браузер пересчитывать
+  // вёрстку. Классы трогаем только когда состояние реально поменялось.
+  let nearContact = false;
+  let wasScrolled = null;
+  let wasVisible = null;
+  let wasNear = null;
+
   const onScroll = () => {
-    if (header) {
-      header.classList.toggle("is-scrolled", window.scrollY > 8);
+    const scrolled = window.scrollY > 8;
+    if (header && scrolled !== wasScrolled) {
+      header.classList.toggle("is-scrolled", scrolled);
+      wasScrolled = scrolled;
     }
 
-    if (mobileCta) {
-      const showAfterHero = window.scrollY > 280;
-      mobileCta.classList.toggle("is-visible", showAfterHero);
+    if (!mobileCta) return;
 
-      if (contactSection) {
-        const contactTop = contactSection.getBoundingClientRect().top;
-        const nearContact = contactTop < window.innerHeight * 0.7;
-        mobileCta.classList.toggle("is-hidden-near-contact", nearContact);
-      }
+    const showAfterHero = window.scrollY > 280;
+    if (showAfterHero !== wasVisible) {
+      mobileCta.classList.toggle("is-visible", showAfterHero);
+      wasVisible = showAfterHero;
+    }
+    if (nearContact !== wasNear) {
+      mobileCta.classList.toggle("is-hidden-near-contact", nearContact);
+      wasNear = nearContact;
     }
   };
+
+  if (contactSection && mobileCta && "IntersectionObserver" in window) {
+    const contactObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          nearContact = entry.isIntersecting;
+        });
+        onScroll();
+      },
+      { rootMargin: "0px 0px -30% 0px" }
+    );
+    contactObserver.observe(contactSection);
+  }
 
   // Обработчик читает геометрию страницы. Без ограничения он делал это на
   // каждое событие прокрутки — во встроенном браузере Telegram это заметно
