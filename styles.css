@@ -2273,19 +2273,19 @@ p {
 }
 
 @media (max-width: 620px) {
+  /* Отдельная плашка, а не полоса во всю ширину. Раньше под кнопкой была
+     белая подложка с запасом под «чёрточку» айфона: когда Safari прячет
+     свою нижнюю панель, этот запас вылезал и кнопка выглядела утонувшей. */
   .mobile-cta {
     display: block;
     position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    left: 0.9rem;
+    right: 0.9rem;
+    bottom: calc(0.8rem + env(safe-area-inset-bottom, 0px));
     z-index: 60;
-    padding: 0.7rem 0.9rem calc(0.7rem + env(safe-area-inset-bottom, 0px));
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(12px);
-    border-top: 1px solid var(--line);
-    box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.08);
-    transform: translateY(110%);
+    padding: 0;
+    background: transparent;
+    transform: translateY(220%);
     transition: transform 0.25s ease;
   }
 
@@ -2294,14 +2294,11 @@ p {
   }
 
   .mobile-cta.is-hidden-near-contact {
-    transform: translateY(110%);
+    transform: translateY(220%);
   }
 
-  /* Без размытия полупрозрачный фон просвечивал текстом страницы */
-  @supports not ((backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px))) {
-    .mobile-cta {
-      background: var(--white);
-    }
+  .mobile-cta__btn {
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.3);
   }
 
   .mobile-cta__btn {
@@ -2319,10 +2316,9 @@ p {
     overflow: hidden;
   }
 
-  /* Запас снизу под липкую кнопку. Без env() на айфонах с «чёрточкой»
-     панель наезжала на последний блок страницы. */
+  /* Запас снизу под плавающую кнопку, чтобы она не накрывала конец страницы */
   body {
-    padding-bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
   }
 
   .container {
