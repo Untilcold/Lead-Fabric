@@ -80,14 +80,16 @@
   const tabs = Array.from(document.querySelectorAll(".channel-tab"));
   const panels = Array.from(document.querySelectorAll(".channel-panel"));
 
-  /** Держит активную вкладку в видимой части ленты, не двигая саму страницу. */
-  const centerTab = (tab) => {
+  /** Держит активную вкладку в видимой части ленты, не двигая саму страницу.
+   *  Плавно — только по нажатию: программная плавная прокрутка во время
+   *  жеста пальцем перебивает скролл страницы. */
+  const centerTab = (tab, smooth) => {
     if (!tabsList || tabsList.scrollWidth <= tabsList.clientWidth) return;
     const left = tab.offsetLeft - (tabsList.clientWidth - tab.offsetWidth) / 2;
-    tabsList.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
+    tabsList.scrollTo({ left: Math.max(0, left), behavior: smooth ? "smooth" : "auto" });
   };
 
-  const activateTab = (tab) => {
+  const activateTab = (tab, smooth) => {
     const id = tab.getAttribute("data-tab");
     tabs.forEach((t) => {
       t.classList.toggle("is-active", t === tab);
@@ -98,7 +100,7 @@
       panel.classList.toggle("is-active", active);
       panel.hidden = !active;
     });
-    centerTab(tab);
+    centerTab(tab, smooth);
   };
 
   /* Автопрокрутка вкладок на узких экранах: пять этапов показываются сами,
@@ -110,6 +112,13 @@
     let timer = null;
     let inView = false;
     let userTook = false;
+    let fingerDown = false;
+
+    // Пока палец на экране, вкладки не переключаются: смена панели во время
+    // жеста вызывает пересчёт вёрстки и скролл начинает спотыкаться.
+    window.addEventListener("touchstart", () => { fingerDown = true; }, { passive: true });
+    window.addEventListener("touchend", () => { fingerDown = false; }, { passive: true });
+    window.addEventListener("touchcancel", () => { fingerDown = false; }, { passive: true });
 
     const stopAuto = () => {
       if (timer) clearInterval(timer);
@@ -121,8 +130,9 @@
       if (timer || userTook || !inView || !narrow.matches || calmMotion.matches) return;
       tabsList.classList.add("is-auto");
       timer = setInterval(() => {
+        if (fingerDown) return;
         const current = tabs.findIndex((t) => t.classList.contains("is-active"));
-        activateTab(tabs[(current + 1) % tabs.length]);
+        activateTab(tabs[(current + 1) % tabs.length], false);
       }, DWELL);
     };
 
@@ -130,7 +140,7 @@
       tab.addEventListener("click", () => {
         userTook = true;
         stopAuto();
-        activateTab(tab);
+        activateTab(tab, true);
       });
     });
 
@@ -158,7 +168,7 @@
       startAuto();
     });
   } else {
-    tabs.forEach((tab) => tab.addEventListener("click", () => activateTab(tab)));
+    tabs.forEach((tab) => tab.addEventListener("click", () => activateTab(tab, true)));
   }
 
   /* Benefits split-in + flip cards */

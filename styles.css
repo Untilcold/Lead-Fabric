@@ -106,10 +106,23 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* Раньше горизонтальный вылет обрезался через overflow-x: hidden на body.
+     На iOS это делает body отдельным прокручиваемым слоем: инерция ломается,
+     страница идёт рывками и «стоит на месте». clip обрезает, не создавая
+     второй области прокрутки; hidden оставлен запасным для старых браузеров. */
+  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-text-size-adjust: 100%;
   /* Липкая шапка перекрывала верх секции при переходе по якорю */
   scroll-padding-top: 84px;
+}
+
+/* Плавная прокрутка к якорям — только там, где есть мышь. На тач-экранах
+   она конфликтует с жестом пальца. */
+@media (hover: hover) and (pointer: fine) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -120,7 +133,6 @@ body {
   line-height: 1.55;
   font-size: 18px;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 img {
@@ -473,7 +485,9 @@ p {
 
 /* Channels / tabs */
 .channels {
-  background: var(--blue);
+  background:
+    radial-gradient(ellipse 70% 60% at 12% 6%, rgba(96, 165, 250, 0.4), transparent 60%),
+    linear-gradient(160deg, #1e3a8a 0%, #1d4ed8 55%, #2563eb 100%);
   color: var(--white);
   padding: 4.5rem 0;
 }
@@ -866,7 +880,9 @@ p {
 
 /* Benefits / flip cards */
 .benefits {
-  background: var(--blue);
+  background:
+    radial-gradient(ellipse 75% 60% at 88% 92%, rgba(96, 165, 250, 0.42), transparent 62%),
+    linear-gradient(200deg, #1e3a8a 0%, #1d4ed8 52%, #2563eb 100%);
   padding: 4.5rem 0 5rem;
   color: var(--white);
   overflow: hidden;
@@ -2466,7 +2482,7 @@ p {
     overflow-x: auto;
     overflow-y: hidden;
     overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: x proximity;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     margin-inline: -1rem;
@@ -2509,7 +2525,7 @@ p {
        вверх-вниз, а вертикальный свайп по ней не листал страницу. */
     overflow-y: hidden;
     overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: x proximity;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     margin-inline: -1rem;
