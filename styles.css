@@ -415,6 +415,42 @@ p {
   gap: 0.75rem;
 }
 
+/* Доказательства на первом экране: цена теперь стоит рано, и к ней
+   человек должен приходить, уже зная масштаб. */
+.hero-stats {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.35rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  font-size: 0.98rem;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.hero-stats li {
+  position: relative;
+  white-space: nowrap;
+}
+
+.hero-stats li + li::before {
+  content: "";
+  position: absolute;
+  left: -0.7rem;
+  top: 0.42em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.hero-stats b {
+  color: var(--white);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
 /* Channels / tabs */
 .channels {
   background: var(--blue);
@@ -782,10 +818,6 @@ p {
   color: rgba(255, 255, 255, 0.9);
   font-size: 1.08rem;
   line-height: 1.5;
-}
-
-.ongoing-actions {
-  margin-top: 1.6rem;
 }
 
 /* Раньше здесь были две дуги-полукружия — единственное такое место на сайте.
