@@ -1352,10 +1352,6 @@ p {
   display: block;
 }
 
-.deliver-swipe {
-  display: none;
-}
-
 .deliver-note {
   margin: 0.35rem 0 0.35rem;
   padding: 0 0.7rem;
@@ -2335,32 +2331,11 @@ p {
     padding: 0 0.5rem;
   }
 
-  /* На телефоне скриншот показываем в натуральную величину и листаем вбок —
-     ужатый до ширины экрана он превращается в нечитаемое пятно. */
+  /* На телефоне подставляется отдельная картинка: из неё вырезаны колонка
+     со временем и пустой столбец, поэтому нужные четыре влезают в экран
+     целиком и шрифт остаётся читаемым. */
   .deliver-shot {
     padding: 0.6rem 0.5rem 0.5rem;
-  }
-
-  .deliver-shot-frame {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .deliver-shot-frame::-webkit-scrollbar {
-    display: none;
-  }
-
-  .deliver-shot-frame img {
-    width: 1010px;
-    max-width: none;
-  }
-
-  .deliver-swipe {
-    display: inline;
-    color: var(--blue);
-    font-weight: 700;
-    white-space: nowrap;
   }
 
   .deliver-points {
