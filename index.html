@@ -77,14 +77,11 @@
         (k.src = r),
         a.parentNode.insertBefore(k, a);
     })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-    // webvisor записывает каждое движение пальца и все изменения страницы.
-    // Во встроенном браузере Telegram это заметно тормозит прокрутку,
-    // а записи сессий здесь всё равно никто не смотрит.
     ym(111234585, "init", {
       clickmap: true,
       trackLinks: true,
       accurateTrackBounce: true,
-      webvisor: false,
+      webvisor: true,
     });
   </script>
 </head>
