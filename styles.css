@@ -751,6 +751,43 @@ p {
 }
 
 /* Counter */
+/* Постоянная работа — блок-утверждение во всю ширину, без сетки плиток:
+   разбивает ритм и снимает ощущение, что сайт продаёт разовую пробу. */
+.ongoing {
+  padding: 4.25rem 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 88% 8%, rgba(96, 165, 250, 0.38), transparent 60%),
+    linear-gradient(150deg, #1e3a8a 0%, #1d4ed8 58%, #2563eb 100%);
+  color: var(--white);
+}
+
+.ongoing-eyebrow {
+  margin: 0 0 0.8rem;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #bfdbfe;
+}
+
+.ongoing-title {
+  color: var(--white);
+  max-width: 20ch;
+  margin-bottom: 1.15rem;
+}
+
+.ongoing-text {
+  margin: 0 0 0.9rem;
+  max-width: 56ch;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.08rem;
+  line-height: 1.5;
+}
+
+.ongoing-actions {
+  margin-top: 1.6rem;
+}
+
 /* Раньше здесь были две дуги-полукружия — единственное такое место на сайте.
    Теперь фон как у остальных светлых секций: подсветка плюс градиент. */
 .counter-section {
@@ -1417,107 +1454,115 @@ p {
   border-bottom: 1px solid #e8eef8;
 }
 
-/* После передачи */
+.label-on-tint {
+  color: #1d4ed8;
+}
+
+/* После передачи — работа с обзвоном школы. Сетка 2×2 в одной карточке,
+   чтобы не повторять трёхколоночные плитки соседних секций. */
 .section-after {
   background:
-    radial-gradient(ellipse 80% 60% at 10% 0%, rgba(37, 99, 235, 0.12), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 90% 100%, rgba(147, 197, 253, 0.2), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 10% 0%, rgba(37, 99, 235, 0.1), transparent 55%),
     linear-gradient(180deg, #f0f7ff 0%, #ffffff 55%);
   border-top: 1px solid #dbeafe;
   border-bottom: 1px solid #e8eef8;
 }
 
-.label-on-tint {
-  color: #1d4ed8;
-}
-
-.after-shell {
+.after-loop {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
 
-.after-speed {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-  padding: 1.25rem 1.35rem;
+/* Отдельные карточки с крупным номером-подложкой: раньше все четыре шага
+   лежали в одной коробке и на телефоне читались сплошной стеной текста. */
+.after-loop li {
+  position: relative;
+  overflow: hidden;
+  padding: 1.35rem 1.3rem 1.4rem;
+  border: 1px solid #dbeafe;
   border-radius: 24px;
-  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 55%, #3b82f6 100%);
-  color: var(--white);
-  box-shadow: 0 16px 40px rgba(37, 99, 235, 0.28);
+  background: var(--white);
+  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.06);
 }
 
-.after-speed-icon {
-  flex: 0 0 auto;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.18);
-  color: #fff;
+.after-loop-icon {
   display: grid;
   place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  margin-bottom: 0.9rem;
+  border-radius: 14px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), background 0.35s ease;
 }
 
-.after-speed h3 {
-  margin: 0 0 0.35rem;
-  color: var(--white);
-  font-size: 1.2rem;
+.after-loop strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 1.12rem;
+  letter-spacing: -0.02em;
 }
 
-.after-speed p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.88);
-  font-size: 1.02rem;
+.after-loop-text {
+  display: block;
+  max-width: 34ch;
+  color: var(--muted-2);
+  font-size: 0.98rem;
   line-height: 1.45;
-  max-width: 58ch;
 }
 
-.after-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+/* Появляются по очереди, как карточки в «Преимуществах» */
+.after-loop li.reveal {
+  transform: translateY(20px) scale(0.98);
 }
 
-.after-card {
-  border: 1px solid #dbeafe;
-  border-radius: 22px;
-  background: var(--white);
-  padding: 1.35rem 1.25rem;
-  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.06);
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease,
-    box-shadow 0.35s ease;
+.after-loop li.reveal.is-visible {
+  transform: none;
+}
+
+.after-loop li:nth-child(1) { transition-delay: 0.04s; }
+.after-loop li:nth-child(2) { transition-delay: 0.13s; }
+.after-loop li:nth-child(3) { transition-delay: 0.22s; }
+.after-loop li:nth-child(4) { transition-delay: 0.31s; }
+
+.after-loop li.is-visible .after-loop-icon {
+  animation: loopIconIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes loopIconIn {
+  from {
+    opacity: 0;
+    transform: scale(0.55) rotate(-14deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .after-card:hover,
+  .after-loop li:hover {
+    border-color: var(--blue);
+    box-shadow: 0 14px 32px rgba(37, 99, 235, 0.14);
+  }
+
+  .after-loop li:hover .after-loop-icon {
+    transform: scale(1.08);
+    background: #dbeafe;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
   .step:hover {
     transform: translateY(-4px);
     border-color: var(--blue);
     box-shadow: 0 12px 28px rgba(37, 99, 235, 0.12);
   }
-}
-
-.after-icon {
-  display: grid;
-  place-items: center;
-  width: 2.6rem;
-  height: 2.6rem;
-  border-radius: 14px;
-  background: var(--blue-soft);
-  color: var(--blue);
-  margin-bottom: 0.9rem;
-}
-
-.after-card h3 {
-  margin: 0 0 0.4rem;
-  font-size: 1.12rem;
-}
-
-.after-card p {
-  margin: 0;
-  color: var(--muted-2);
-  font-size: 0.98rem;
-  line-height: 1.4;
 }
 
 /* Калькулятор окупаемости */
@@ -1776,6 +1821,30 @@ p {
   height: 0.55rem;
   border-radius: 50%;
   background: #93c5fd;
+}
+
+/* Пробная партия как понятный стартовый набор, а не «посчитайте сами» */
+.price-start {
+  margin: 1.15rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.price-start strong {
+  display: inline-block;
+  margin-top: 0.15rem;
+  color: var(--white);
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Кнопка прямо под расчётом — в момент, когда человек убедился сам */
+.calc-cta {
+  margin-top: 1.25rem;
 }
 
 .section-price .calc {
@@ -2204,7 +2273,6 @@ p {
     grid-template-columns: 1fr 1fr;
   }
 
-  .after-grid,
   .price-layout,
   .price-shell,
   .cta-panel {
@@ -2352,6 +2420,15 @@ p {
 
   .deliver-points {
     grid-template-columns: 1fr;
+  }
+
+  .after-loop {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .after-loop li {
+    padding: 1.15rem 1.15rem 1.25rem;
   }
 
   .channels-shell {

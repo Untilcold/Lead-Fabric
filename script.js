@@ -313,6 +313,7 @@
       student: document.getElementById("calc-student"),
       be: document.getElementById("calc-be"),
       beLabel: document.getElementById("calc-be-label"),
+      cta: document.getElementById("calc-cta"),
     };
 
     const rub = (value) =>
@@ -339,6 +340,22 @@
       }
     };
 
+    /** «1 контакт», «2 контакта», «50 контактов» — для кнопки под расчётом. */
+    const contactsWord = (n) => {
+      const tail = n % 100;
+      if (tail >= 11 && tail <= 14) return "контактов";
+      switch (n % 10) {
+        case 1:
+          return "контакт";
+        case 2:
+        case 3:
+        case 4:
+          return "контакта";
+        default:
+          return "контактов";
+      }
+    };
+
     const recalc = () => {
       const contacts = read(inputs.contacts, 50);
       const price = read(inputs.price, 600);
@@ -355,6 +372,9 @@
       if (out.student) out.student.innerHTML = rub(studentValue);
       if (out.be) out.be.textContent = String(breakEven);
       if (out.beLabel) out.beLabel.textContent = `${studentsWord(breakEven)} партию`;
+      if (out.cta) {
+        out.cta.textContent = `Обсудить партию на ${contacts} ${contactsWord(contacts)}`;
+      }
     };
 
     Object.values(inputs).forEach((el) => {
