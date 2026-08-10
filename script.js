@@ -394,4 +394,48 @@
       }
     });
   }
+
+  /* Всплывающая панель «Сотрудничество» поверх белой карточки в блоке цены.
+     Отдельной секции на странице больше нет — она открывается кнопкой. */
+  const processPop = document.getElementById("process-pop");
+  const processOpen = document.getElementById("process-open");
+
+  if (processPop && processOpen) {
+    const closeBtn = processPop.querySelector(".process-pop-close");
+
+    const openPop = () => {
+      if (!processPop.hidden) return;
+      processPop.hidden = false;
+      processOpen.setAttribute("aria-expanded", "true");
+      if (closeBtn) closeBtn.focus({ preventScroll: true });
+    };
+
+    const closePop = (returnFocus) => {
+      if (processPop.hidden) return;
+      processPop.hidden = true;
+      processOpen.setAttribute("aria-expanded", "false");
+      if (returnFocus) processOpen.focus({ preventScroll: true });
+    };
+
+    processOpen.addEventListener("click", openPop);
+    if (closeBtn) closeBtn.addEventListener("click", () => closePop(true));
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closePop(true);
+    });
+
+    // Клик мимо панели закрывает её — привычное поведение всплывающего окна
+    document.addEventListener("click", (event) => {
+      if (processPop.hidden) return;
+      if (processPop.contains(event.target) || processOpen.contains(event.target)) return;
+      closePop(false);
+    });
+
+    // Пункт меню «Сотрудничество» ведёт к цене и сразу раскрывает панель
+    document.querySelectorAll("[data-open-process]").forEach((link) => {
+      link.addEventListener("click", () => {
+        window.setTimeout(openPop, 420);
+      });
+    });
+  }
 })();

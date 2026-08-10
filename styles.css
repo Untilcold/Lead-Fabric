@@ -892,14 +892,14 @@ p {
 /* Counter */
 /* Постоянная работа — блок-утверждение во всю ширину, без сетки плиток:
    разбивает ритм и снимает ощущение, что сайт продаёт разовую пробу. */
-/* Светлый: «Сотрудничество» перед ним стало синим, а «Преимущества» после него
-   синие — два синих блока подряд идти не должны. */
+/* Единственный густо-синий блок во второй половине страницы — он должен
+   останавливать взгляд. Соседи слева и справа светлые. */
 .ongoing {
   padding: 4.25rem 0;
   background:
-    radial-gradient(ellipse 70% 55% at 88% 4%, rgba(37, 99, 235, 0.1), transparent 55%),
-    linear-gradient(180deg, #f4f8ff 0%, #ffffff 62%);
-  border-bottom: 1px solid #e8eef8;
+    radial-gradient(ellipse 70% 60% at 88% 8%, rgba(96, 165, 250, 0.38), transparent 60%),
+    linear-gradient(150deg, #1e3a8a 0%, #1d4ed8 58%, #2563eb 100%);
+  color: var(--white);
 }
 
 .ongoing-eyebrow {
@@ -908,10 +908,11 @@ p {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #1d4ed8;
+  color: #bfdbfe;
 }
 
 .ongoing-title {
+  color: var(--white);
   max-width: 20ch;
   margin-bottom: 1.15rem;
 }
@@ -919,7 +920,7 @@ p {
 .ongoing-text {
   margin: 0 0 0.9rem;
   max-width: 56ch;
-  color: var(--muted-2);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 1.08rem;
   line-height: 1.5;
 }
@@ -936,8 +937,8 @@ p {
   max-width: 56ch;
   margin: 1.5rem 0 0;
   padding-top: 1.25rem;
-  border-top: 1px solid var(--line);
-  color: var(--muted-2);
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.84);
   font-size: 1rem;
   line-height: 1.45;
 }
@@ -945,20 +946,26 @@ p {
 .ongoing-geo svg {
   flex: 0 0 auto;
   margin-top: 0.15rem;
-  color: var(--blue);
+  color: #bfdbfe;
 }
 
 /* Benefits / flip cards */
+/* Светлый сине-белый градиент, как у остальных светлых секций: густо-синим
+   на этом участке страницы остаётся только «После передачи». */
 .benefits {
   background:
-    radial-gradient(ellipse 75% 60% at 88% 92%, rgba(96, 165, 250, 0.42), transparent 62%),
-    linear-gradient(180deg, #2159d8 0%, #1d4ed8 48%, #1e3a8a 100%);
+    radial-gradient(ellipse 75% 60% at 88% 92%, rgba(37, 99, 235, 0.1), transparent 60%),
+    linear-gradient(180deg, #f4f8ff 0%, #ffffff 58%, #eff6ff 100%);
   padding: 4.5rem 0 5rem;
-  color: var(--white);
   overflow: hidden;
 }
 
+/* Ярлык остался и во всплывающей панели «Сотрудничество» — там фон синий */
 .label-on-blue {
+  color: #1d4ed8;
+}
+
+.process-pop .label-on-blue {
   color: rgba(255, 255, 255, 0.88);
 }
 
@@ -970,12 +977,11 @@ p {
 .benefits-title {
   max-width: 16ch;
   margin: 0;
-  color: var(--white);
   font-size: clamp(2rem, 4vw, 3rem);
 }
 
 /* Раньше здесь гасилось opacity: 0.55 — заголовок навсегда тускнел
-   после появления карточек и переставал читаться на синем. */
+   после появления карточек и переставал читаться. */
 .benefits.is-split .benefits-intro {
   transform: translateY(-6px);
 }
@@ -1048,6 +1054,9 @@ p {
   overflow: hidden;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  /* Секция стала светлой — без рамки светлая карточка сливается с фоном */
+  border: 1px solid #dbeafe;
+  box-shadow: 0 14px 34px rgba(37, 99, 235, 0.1);
 }
 
 .flip-front {
@@ -1505,38 +1514,177 @@ p {
 }
 
 /* Сотрудничество — был плоский белый фон, единственная секция без оформления */
-/* Синий: блок стоит между светлой «Ценой» и светлым «После передачи» —
-   секции на странице чередуются по цвету. */
-.section-process {
+.label-on-tint {
+  color: #1d4ed8;
+}
+
+/* Кнопка внизу белой карточки «Вы покупаете не звонок, а данные».
+   Раньше здесь была серая подпись — теперь тот же текст работает входом
+   во всплывающую панель «Сотрудничество». */
+.buy-cta {
+  display: block;
+  width: 100%;
+  margin: 1.35rem 0 0;
+  padding: 1.05rem 1.2rem 1.1rem;
+  border: 0;
+  border-radius: 20px;
+  background:
+    radial-gradient(ellipse 80% 130% at 88% 0%, rgba(96, 165, 250, 0.45), transparent 62%),
+    linear-gradient(150deg, #1d4ed8 0%, #2563eb 100%);
+  color: var(--white);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.24);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+}
+
+.price-asset .buy-cta-note {
+  display: block;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.price-asset .buy-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.8rem;
+  color: var(--white);
+  font-size: 1.04rem;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.buy-cta-link svg {
+  flex: 0 0 auto;
+  transition: transform 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .buy-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.3);
+  }
+
+  .buy-cta:hover .buy-cta-link svg {
+    transform: translateX(4px);
+  }
+}
+
+/* Панель накрывает белую карточку целиком; если шагов не хватает по высоте,
+   она свисает ниже карточки — отсюда тень, она держит её «поверх». */
+.process-pop {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 6;
+  min-height: 100%;
+  padding: 1.7rem 1.5rem 1.8rem;
+  border-radius: 28px;
   background:
     radial-gradient(ellipse 70% 60% at 12% 6%, rgba(96, 165, 250, 0.4), transparent 60%),
     linear-gradient(160deg, #1e3a8a 0%, #1d4ed8 55%, #2563eb 100%);
   color: var(--white);
+  box-shadow: 0 30px 70px rgba(2, 6, 23, 0.38);
+  animation: popIn 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.section-process h2 {
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.process-pop-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
   color: var(--white);
+  cursor: pointer;
+  transition: background 0.25s ease;
 }
 
-.section-process .label {
-  color: #bfdbfe;
+@media (hover: hover) and (pointer: fine) {
+  .process-pop-close:hover {
+    background: rgba(255, 255, 255, 0.24);
+  }
 }
 
-/* Шаги на синем: карточка белая при любой ширине, иначе тёмный текст пропадает */
-.section-process .step {
+.process-pop .label {
+  margin-bottom: 0.5rem;
+}
+
+.price-asset h3.process-pop-title {
+  margin: 0 0 1.3rem;
+  color: var(--white);
+  font-size: 1.5rem;
+  letter-spacing: -0.03em;
+}
+
+.process-pop .steps {
+  max-width: none;
+}
+
+/* Шаги на синем: карточка белая при любой ширине, иначе тёмный текст пропадает.
+   Специфичность поднята, потому что общие правила карточки цены сильнее. */
+.process-pop .step {
   background: var(--white);
   border-color: #dbeafe;
   color: var(--text);
-  box-shadow: 0 10px 26px rgba(2, 6, 23, 0.16);
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.18);
+  animation: stepIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
-.section-process .steps::before {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.45));
+.process-pop .step p {
+  font-size: 1rem;
+}
+
+.process-pop .step-num {
+  color: var(--white);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.process-pop .step-icon {
+  color: var(--blue);
+  font-size: 1rem;
+}
+
+.process-pop .steps::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.45));
   opacity: 1;
 }
 
-.label-on-tint {
-  color: #1d4ed8;
+.process-pop .step:nth-child(1) { animation-delay: 0.05s; }
+.process-pop .step:nth-child(2) { animation-delay: 0.12s; }
+.process-pop .step:nth-child(3) { animation-delay: 0.19s; }
+.process-pop .step:nth-child(4) { animation-delay: 0.26s; }
+.process-pop .step:nth-child(5) { animation-delay: 0.33s; }
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Разбор обзвона — четыре шага внутри синего блока «После передачи» */
@@ -1558,7 +1706,9 @@ p {
   border: 1px solid #dbeafe;
   border-radius: 24px;
   background: var(--white);
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.07);
+  /* Блок вокруг синий и красит текст в белый — карточкам возвращаем тёмный */
+  color: var(--text);
+  box-shadow: 0 14px 32px rgba(2, 6, 23, 0.16);
 }
 
 .after-loop-icon {
@@ -1790,6 +1940,7 @@ p {
 }
 
 .price-asset {
+  position: relative;
   border: 1px solid #dbeafe;
   border-radius: 28px;
   background: var(--white);
@@ -1797,12 +1948,14 @@ p {
   box-shadow: 0 12px 32px rgba(37, 99, 235, 0.06);
 }
 
-.price-asset h3 {
+/* Селекторы прижаты к прямым потомкам: внутри карточки живёт ещё и всплывающая
+   панель со своим списком шагов, общие правила ломали ей вёрстку. */
+.price-asset > h3 {
   margin: 0 0 1.15rem;
   font-size: 1.3rem;
 }
 
-.price-asset ul {
+.price-asset > ul {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -1810,7 +1963,7 @@ p {
   gap: 0.95rem;
 }
 
-.price-asset li {
+.price-asset > ul > li {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 0.7rem;
@@ -1829,24 +1982,17 @@ p {
   place-items: center;
 }
 
-.price-asset strong {
+.price-asset > ul strong {
   display: block;
   font-size: 1.02rem;
   margin-bottom: 0.2rem;
 }
 
-.price-asset span {
+/* Только текст пункта: раньше правило доставало и до иконки и гасило её синий */
+.price-asset > ul div span {
   color: var(--muted-2);
   font-size: 0.95rem;
   line-height: 1.4;
-}
-
-.price-asset-note {
-  margin: 1.2rem 0 0;
-  padding-top: 1rem;
-  border-top: 1px solid #e8eef8;
-  color: var(--muted);
-  font-size: 0.92rem;
 }
 
 /* Знака ₽ нет в подключённом Manrope, он берётся из системного шрифта
@@ -2686,14 +2832,14 @@ p {
     padding: 0;
     border: 0;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(37, 99, 235, 0.28);
     cursor: pointer;
     transition: width 0.25s ease, background 0.25s ease;
   }
 
   .flip-dot.is-active {
     width: 22px;
-    background: var(--white);
+    background: var(--blue);
   }
 
   /* FAQ как у Директа: одна светлая панель, строки с разделителями и шевроном.
