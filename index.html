@@ -31,7 +31,10 @@
   <link rel="stylesheet" href="styles.css" />
 
   <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru; connect-src 'self' https://mc.yandex.ru https://formspree.io; img-src 'self' data: https://mc.yandex.ru; style-src 'self' 'unsafe-inline'; font-src 'self'; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'" />
+  <!-- Домены Яндекса перечислены шире, чем нужно самому счётчику: карта кликов,
+       карта скроллинга и вебвизор подгружают свою оболочку с yastatic.net и
+       webvisor.com, и с прежним узким списком эти инструменты не открывались. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru https://yastatic.net https://*.webvisor.com; connect-src 'self' https://mc.yandex.ru https://mc.yandex.com https://yastatic.net https://*.webvisor.com https://formspree.io; img-src 'self' data: https://mc.yandex.ru https://yastatic.net https://*.webvisor.com; style-src 'self' 'unsafe-inline' https://yastatic.net; font-src 'self' data: https://yastatic.net; frame-src 'self' https://mc.yandex.ru https://yandex.ru https://*.webvisor.com; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'" />
 
   <script type="application/ld+json">
   {

@@ -380,6 +380,7 @@
 
         if (response.ok) {
           form.reset();
+          ymGoal("form_send");
           status.classList.add("is-ok");
           status.textContent = "Спасибо! Заявка отправлена — скоро свяжусь.";
         } else {
@@ -437,5 +438,62 @@
         window.setTimeout(openPop, 420);
       });
     });
+  }
+
+  /* ------------------------------------------------------------------
+     Цели Метрики. Счётчик сам по себе показывает только визиты — сколько
+     человек написали в Telegram или отправили заявку, без целей не видно.
+     Объявлено функцией, а не константой: вызов из формы стоит выше по файлу.
+     ------------------------------------------------------------------ */
+  function ymGoal(name) {
+    if (typeof window.ym === "function") window.ym(111234585, "reachGoal", name);
+  }
+
+  // Клики по мессенджерам ловим делегированием: ссылок несколько и они
+  // разбросаны по странице, включая плавающую кнопку и кнопку под расчётом.
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest && event.target.closest("a[href]");
+    if (!link) return;
+    const href = link.getAttribute("href") || "";
+    if (href.indexOf("t.me/") !== -1) ymGoal("tg_click");
+    else if (href.indexOf("wa.me/") !== -1) ymGoal("wa_click");
+  });
+
+  // Калькулятор: сам факт подстановки своих цифр — сильный признак интереса
+  let calcTouched = false;
+  ["calc-contacts", "calc-price", "calc-fee", "calc-months"].forEach((id) => {
+    const field = document.getElementById(id);
+    if (!field) return;
+    field.addEventListener("change", () => {
+      if (calcTouched) return;
+      calcTouched = true;
+      ymGoal("calc_use");
+    });
+  });
+
+  const openProcessBtn = document.getElementById("process-open");
+  if (openProcessBtn) {
+    let processOpened = false;
+    openProcessBtn.addEventListener("click", () => {
+      if (processOpened) return;
+      processOpened = true;
+      ymGoal("process_open");
+    });
+  }
+
+  // Долистал до цены — граница между «посмотрел» и «выбирает»
+  const priceSection = document.getElementById("price");
+  if (priceSection && "IntersectionObserver" in window) {
+    const priceWatcher = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          ymGoal("price_view");
+          priceWatcher.disconnect();
+        });
+      },
+      { threshold: 0.3 }
+    );
+    priceWatcher.observe(priceSection);
   }
 })();
