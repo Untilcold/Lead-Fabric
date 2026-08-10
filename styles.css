@@ -487,6 +487,71 @@ p {
   letter-spacing: -0.02em;
 }
 
+/* Первый экран с настоящей таблицей вместо фотографии:
+   доказательство встречает человека до первой прочитанной строки. */
+.hero--table {
+  background:
+    radial-gradient(ellipse 80% 55% at 78% 10%, rgba(37, 99, 235, 0.5), transparent 62%),
+    linear-gradient(165deg, #0f172a 0%, #172554 55%, #1e3a8a 100%);
+}
+
+.hero--table .hero-media {
+  inset: 0 0 auto 0;
+  height: 58%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero--table .hero-media img {
+  display: block;
+  width: 104%;
+  max-width: none;
+  height: auto;
+  margin-top: 2.4rem;
+  transform: rotate(-2deg);
+  border-radius: 14px;
+  box-shadow: 0 30px 70px rgba(2, 6, 23, 0.75);
+}
+
+.hero--table .hero-shade {
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.55) 0%,
+    rgba(15, 23, 42, 0.12) 18%,
+    rgba(15, 23, 42, 0.55) 42%,
+    rgba(15, 23, 42, 0.95) 56%,
+    #0f172a 70%
+  );
+}
+
+@media (min-width: 861px) {
+  .hero--table .hero-media {
+    inset: 0 0 0 46%;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero--table .hero-media img {
+    width: 112%;
+    margin-top: 0;
+    margin-left: 1.5rem;
+    transform: rotate(-3deg);
+  }
+
+  .hero--table .hero-shade {
+    background: linear-gradient(
+      90deg,
+      #0f172a 0%,
+      rgba(15, 23, 42, 0.96) 34%,
+      rgba(15, 23, 42, 0.55) 46%,
+      rgba(15, 23, 42, 0.15) 60%,
+      transparent 75%
+    );
+  }
+}
 /* Channels / tabs */
 .channels {
   background:
@@ -827,12 +892,14 @@ p {
 /* Counter */
 /* Постоянная работа — блок-утверждение во всю ширину, без сетки плиток:
    разбивает ритм и снимает ощущение, что сайт продаёт разовую пробу. */
+/* Светлый: «Сотрудничество» перед ним стало синим, а «Преимущества» после него
+   синие — два синих блока подряд идти не должны. */
 .ongoing {
   padding: 4.25rem 0;
   background:
-    radial-gradient(ellipse 70% 60% at 88% 8%, rgba(96, 165, 250, 0.38), transparent 60%),
-    linear-gradient(150deg, #1e3a8a 0%, #1d4ed8 58%, #2563eb 100%);
-  color: var(--white);
+    radial-gradient(ellipse 70% 55% at 88% 4%, rgba(37, 99, 235, 0.1), transparent 55%),
+    linear-gradient(180deg, #f4f8ff 0%, #ffffff 62%);
+  border-bottom: 1px solid #e8eef8;
 }
 
 .ongoing-eyebrow {
@@ -841,11 +908,10 @@ p {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #bfdbfe;
+  color: #1d4ed8;
 }
 
 .ongoing-title {
-  color: var(--white);
   max-width: 20ch;
   margin-bottom: 1.15rem;
 }
@@ -853,7 +919,7 @@ p {
 .ongoing-text {
   margin: 0 0 0.9rem;
   max-width: 56ch;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--muted-2);
   font-size: 1.08rem;
   line-height: 1.5;
 }
@@ -870,8 +936,8 @@ p {
   max-width: 56ch;
   margin: 1.5rem 0 0;
   padding-top: 1.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.22);
-  color: rgba(255, 255, 255, 0.84);
+  border-top: 1px solid var(--line);
+  color: var(--muted-2);
   font-size: 1rem;
   line-height: 1.45;
 }
@@ -879,14 +945,14 @@ p {
 .ongoing-geo svg {
   flex: 0 0 auto;
   margin-top: 0.15rem;
-  color: #bfdbfe;
+  color: var(--blue);
 }
 
 /* Benefits / flip cards */
 .benefits {
   background:
     radial-gradient(ellipse 75% 60% at 88% 92%, rgba(96, 165, 250, 0.42), transparent 62%),
-    linear-gradient(200deg, #1e3a8a 0%, #1d4ed8 52%, #2563eb 100%);
+    linear-gradient(180deg, #2159d8 0%, #1d4ed8 48%, #1e3a8a 100%);
   padding: 4.5rem 0 5rem;
   color: var(--white);
   overflow: hidden;
@@ -1439,12 +1505,34 @@ p {
 }
 
 /* Сотрудничество — был плоский белый фон, единственная секция без оформления */
+/* Синий: блок стоит между светлой «Ценой» и светлым «После передачи» —
+   секции на странице чередуются по цвету. */
 .section-process {
   background:
-    radial-gradient(ellipse 70% 55% at 88% 0%, rgba(37, 99, 235, 0.1), transparent 55%),
-    linear-gradient(180deg, #f4f8ff 0%, #ffffff 62%);
-  border-top: 1px solid #dbeafe;
-  border-bottom: 1px solid #e8eef8;
+    radial-gradient(ellipse 70% 60% at 12% 6%, rgba(96, 165, 250, 0.4), transparent 60%),
+    linear-gradient(160deg, #1e3a8a 0%, #1d4ed8 55%, #2563eb 100%);
+  color: var(--white);
+}
+
+.section-process h2 {
+  color: var(--white);
+}
+
+.section-process .label {
+  color: #bfdbfe;
+}
+
+/* Шаги на синем: карточка белая при любой ширине, иначе тёмный текст пропадает */
+.section-process .step {
+  background: var(--white);
+  border-color: #dbeafe;
+  color: var(--text);
+  box-shadow: 0 10px 26px rgba(2, 6, 23, 0.16);
+}
+
+.section-process .steps::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.45));
+  opacity: 1;
 }
 
 .label-on-tint {
@@ -1470,9 +1558,7 @@ p {
   border: 1px solid #dbeafe;
   border-radius: 24px;
   background: var(--white);
-  /* Блок вокруг синий и красит текст в белый — карточкам возвращаем тёмный */
-  color: var(--text);
-  box-shadow: 0 14px 32px rgba(2, 6, 23, 0.16);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.07);
 }
 
 .after-loop-icon {
