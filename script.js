@@ -326,8 +326,8 @@
 
     const recalc = () => {
       const contacts = read(inputs.contacts, 50);
-      const price = read(inputs.price, 600);
-      const fee = read(inputs.fee, 5000);
+      const price = read(inputs.price, 700);
+      const fee = read(inputs.fee, 6000);
       const months = read(inputs.months, 6);
 
       const batchCost = contacts * price;
