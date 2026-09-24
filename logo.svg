@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 3 91 32" role="img" aria-label="Lead Fabric">
+  <!-- Утка ведёт утят: lead — «вести за собой» -->
+  <defs>
+    <path id="duck" d="M0 11 C6 15 14 16 24 15 C30 14 36 16 36 21 C36 30 12 32 6 24 C3 20 0 16 0 11 Z M21 9 A7 7 0 1 1 35 9 A7 7 0 1 1 21 9 Z M34 8 L41 10.2 L34 12.4 Z"/>
+  </defs>
+  <use href="#duck" transform="translate(2 18) scale(.5)" fill="#60A5FA"/>
+  <use href="#duck" transform="translate(24 18) scale(.5)" fill="#60A5FA"/>
+  <use href="#duck" transform="translate(48 4)" fill="#2563EB"/>
+  <circle cx="78" cy="11.6" r="1.4" fill="#FFFFFF"/>
+</svg>

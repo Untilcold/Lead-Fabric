@@ -241,7 +241,7 @@ p {
 }
 
 .logo-mark {
-  width: 28px;
+  width: auto;
   height: 28px;
   flex: 0 0 auto;
   display: block;
