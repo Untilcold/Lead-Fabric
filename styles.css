@@ -256,7 +256,7 @@ h2 { font-size: clamp(36px, 5vw, 72px); font-weight: 800; line-height: 1.02; let
   .way-vis-title { display: none; }
   .way-list { gap: 3px; margin-top: 0; }
   .way-list li { padding-left: 34px; font-size: 13px; line-height: 1.35; }
-  .way-list li::before { top: 3px; width: 26px; height: 11px; }
+  .way-list li::before { top: 3px; width: 28px; height: 12px; }
 }
 /* Невысокие телефоны (iPhone SE, mini, небольшие Android): без трёх строк-пояснений —
    заголовок, текст и картинка остаются, и вся карточка помещается под остановками. */
@@ -315,7 +315,9 @@ h2 { font-size: clamp(36px, 5vw, 72px); font-weight: 800; line-height: 1.02; let
 /* на телефоне картинки ниже — панель короче */
 @media (max-width: 899px) {
   .mock { min-height: 72px; margin: 0 0 8px; padding: 8px 12px; }
-  .mock--bars { height: 76px; justify-content: flex-start; padding: 28px 16px 0; }   /* столбики слева — ярлык справа их не накрывает */
+  /* подпись по центру сверху, столбики по центру под ней — ровно и не накрывают друг друга */
+  .mock--bars { height: 100px; justify-content: center; padding: 42px 16px 0; }
+  .mock--bars .mock-tag { left: 50%; right: auto; top: 8px; transform: translateX(-50%); white-space: nowrap; }
   .mock--bars i { width: 20px; }
   .mock-tag { right: 8px; top: 8px; font-size: 12px; }
   .mock--path { min-height: 72px; padding: 0 var(--pad); }
