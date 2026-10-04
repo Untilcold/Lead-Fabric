@@ -3,17 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Политика конфиденциальности — Lead Fabric</title>
+  <title>Политика обработки персональных данных — Lead Fabric</title>
   <meta name="description" content="Политика обработки персональных данных Lead Fabric: какие данные собираются, зачем, кому передаются и как реализовать свои права." />
   <meta name="robots" content="noindex, follow" />
+  <meta name="theme-color" content="#2563EB" />
 
   <link rel="canonical" href="https://lead-fabric.ru/privacy-policy.html" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="preload" href="fonts/manrope-cyrillic-800.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="styles.css" />
+  <script>document.documentElement.classList.add("js");</script>
 
   <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru; connect-src 'self' https://mc.yandex.ru; img-src 'self' data: https://mc.yandex.ru; style-src 'self' 'unsafe-inline'; font-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru https://yastatic.net https://*.webvisor.com; connect-src 'self' https://mc.yandex.ru https://mc.yandex.com wss://mc.yandex.ru wss://mc.yandex.com https://yastatic.net https://*.webvisor.com; img-src 'self' data: https://mc.yandex.ru https://mc.yandex.com https://yastatic.net https://*.webvisor.com; style-src 'self' 'unsafe-inline' https://yastatic.net; font-src 'self' data: https://yastatic.net; frame-src 'self' https://mc.yandex.ru https://mc.yandex.com https://yandex.ru https://*.webvisor.com; form-action 'self'; base-uri 'self'; object-src 'none'" />
 
   <!-- Яндекс.Метрика -->
   <script>
@@ -41,56 +44,27 @@
     });
   </script>
 
+  <!-- Страница политики в стиле сайта: синяя полоса с заголовком, ниже текст
+       одной колонкой для чтения. Разделы без номеров — как везде на сайте. -->
   <style>
-    .legal {
-      padding: 7rem 0 5rem;
-      max-width: 760px;
-    }
-    .legal h1 {
-      font-size: clamp(2rem, 4vw, 2.75rem);
-      margin-bottom: 0.5rem;
-    }
-    .legal .legal-updated {
-      color: var(--muted);
-      font-size: 0.92rem;
-      margin-bottom: 2.5rem;
-    }
-    .legal h2 {
-      font-size: 1.35rem;
-      max-width: none;
-      margin-top: 2.2rem;
-    }
-    .legal p,
-    .legal li {
-      color: var(--muted-2);
-      font-size: 1rem;
-    }
-    .legal ul,
-    .legal ol {
-      padding-left: 1.3rem;
-      margin: 0 0 1rem;
-    }
-    .legal li {
-      margin-bottom: 0.4rem;
-    }
-    .legal strong {
-      color: var(--text);
-    }
-    .legal-note {
-      background: var(--blue-soft);
-      border: 1px solid #dbeafe;
-      border-radius: 14px;
-      padding: 1rem 1.2rem;
-      font-size: 0.92rem;
-    }
-    .legal-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-weight: 700;
-      color: var(--blue);
-      margin-bottom: 1.5rem;
-    }
+    .legal-home { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 16px; color: var(--blue); text-decoration: none; }
+    @media (hover: hover) and (pointer: fine) { .legal-home:hover { text-decoration: underline; text-underline-offset: 5px; } }
+    .legal-head { padding: 64px 0 56px; }
+    .legal-head h1 { max-width: 15em; font-size: clamp(36px, 5.4vw, 68px); font-weight: 800; line-height: 1.02; letter-spacing: -0.03em; }
+    .legal-date { margin-top: 18px; font-size: 16px; color: rgba(255, 255, 255, 0.82); }
+    .legal { max-width: 780px; padding: 56px 0 96px; }
+    .legal-note { margin: 6px 6px 8px 0; padding: 22px 24px; font-size: 17px; line-height: 1.6; }
+    .legal h2 { max-width: none; margin-top: 48px; font-size: clamp(23px, 2.3vw, 28px); line-height: 1.15; letter-spacing: -0.02em; }
+    .legal p { margin-top: 14px; font-size: 17px; line-height: 1.65; }
+    .legal ul { display: grid; gap: 12px; margin-top: 16px; }
+    .legal li { position: relative; padding-left: 44px; font-size: 17px; line-height: 1.6; }
+    .legal li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 28px; height: 12px; background: var(--brood); color: var(--blue); }
+    .legal strong { font-weight: 700; }
+    .legal a:not(.btn) { color: var(--blue); text-underline-offset: 3px; }
+    .legal-contact { margin-top: 56px; padding-top: 32px; border-top: 2px solid var(--ink); }
+    .legal-contact h2 { margin-top: 0; }
+    .legal-contact .btn { margin-top: 22px; }
+    @media (min-width: 1000px) { .legal-head { padding: 88px 0 72px; } .legal { padding: 72px 0 120px; } }
   </style>
 </head>
 <body>
@@ -100,153 +74,158 @@
     </div>
   </noscript>
 
-  <header class="site-header">
-    <div class="container header-inner">
+  <header class="top">
+    <div class="wrap top-in">
       <a class="logo" href="index.html">
-        <img class="logo-mark" src="logo.svg" width="80" height="28" alt="" />
+        <img src="logo.svg" width="80" height="28" alt="" />
         Lead Fabric
       </a>
+      <a class="legal-home" href="index.html"><span aria-hidden="true">←</span> На главную</a>
     </div>
   </header>
 
   <main>
-    <div class="container legal">
-      <a class="legal-back" href="index.html">← На главную</a>
-      <h1>Политика в отношении обработки персональных данных</h1>
-      <p class="legal-updated">Действует с 07.08.2026</p>
+    <section class="legal-head f-blue">
+      <div class="wrap">
+        <h1>Политика обработки персональных данных</h1>
+        <p class="legal-date">Действует с&nbsp;04.10.2026</p>
+      </div>
+    </section>
 
-      <p class="legal-note">
-        Это описание того, как Lead Fabric на самом деле собирает и использует данные — при посещении сайта
-        <strong>lead-fabric.ru</strong> и при личном сборе контактов родителей в районе. Если что-то в вашей ситуации
-        не описано здесь, напишите — раздел «Контакты» ниже.
-      </p>
+    <div class="wrap">
+      <article class="legal">
+        <p class="legal-note sel">
+          Здесь описано, как Lead Fabric на&nbsp;самом деле собирает и&nbsp;использует данные: при посещении сайта
+          <strong>lead-fabric.ru</strong> и&nbsp;при личном сборе контактов родителей в&nbsp;районе. Если чего-то в&nbsp;вашей
+          ситуации здесь нет — напишите, контакт в&nbsp;конце страницы.
+        </p>
 
-      <h2>1. Оператор персональных данных</h2>
-      <p>
-        Обработку персональных данных осуществляет
-        Назар Павлов, самозанятый, далее — «Оператор», «Lead Fabric».
-        Контакты для связи по вопросам обработки данных: Telegram
-        <a href="https://t.me/untilcold" target="_blank" rel="noopener">@untilcold</a>,
-        WhatsApp <a href="https://wa.me/79524817172" target="_blank" rel="noopener">+7 952 481 71 72</a>.
-      </p>
+        <h2>Оператор персональных данных</h2>
+        <p>
+          Обработку персональных данных осуществляет Lead Fabric (далее — «Оператор»). По&nbsp;вопросам обработки данных
+          пишите в&nbsp;Telegram <a href="https://t.me/untilcold" target="_blank" rel="noopener">@untilcold</a>.
+        </p>
 
-      <h2>2. Какие данные обрабатываются</h2>
-      <p>Lead Fabric собирает персональные данные в двух разных ситуациях, и это разные наборы данных:</p>
-      <ul>
-        <li>
-          <strong>Заявка на сайте.</strong> Если вы школа/секция и заполняете форму на lead-fabric.ru: имя, название
-          школы, телефон или email.
-        </li>
-        <li>
-          <strong>Личный сбор контактов в районе.</strong> Если вы родитель и разговаривали с представителем Lead
-          Fabric на улице или получили купон: имя, номер телефона, имя ребёнка и его возраст. Эти данные называются
-          нам лично, добровольно, в разговоре — не собираются автоматически и не берутся из открытых баз.
-        </li>
-        <li>
-          <strong>Технические данные посетителей сайта.</strong> IP-адрес, файлы cookie, данные о взаимодействии со
-          страницей — через счётчик Яндекс.Метрики (включая Вебвизор, записывающий сессии посетителей сайта).
-        </li>
-      </ul>
+        <h2>Какие данные обрабатываются</h2>
+        <p>Lead Fabric собирает персональные данные в&nbsp;двух разных ситуациях, и&nbsp;это разные наборы данных:</p>
+        <ul>
+          <li>
+            <strong>Заявка на&nbsp;сайте.</strong> Если вы школа или секция и&nbsp;заполняете форму на&nbsp;lead-fabric.ru:
+            имя, название школы, телефон или email.
+          </li>
+          <li>
+            <strong>Личный сбор контактов в&nbsp;районе.</strong> Если вы родитель и&nbsp;разговаривали с&nbsp;представителем
+            Lead Fabric на&nbsp;улице или получили купон: имя, номер телефона, имя ребёнка и&nbsp;его возраст. Эти данные
+            называются лично, добровольно, в&nbsp;разговоре — не&nbsp;собираются автоматически и&nbsp;не&nbsp;берутся из&nbsp;открытых баз.
+          </li>
+          <li>
+            <strong>Технические данные посетителей сайта.</strong> IP-адрес, файлы cookie, данные о&nbsp;взаимодействии
+            со&nbsp;страницей — через счётчик Яндекс.Метрики, включая Вебвизор, который записывает сессии посетителей.
+          </li>
+        </ul>
 
-      <h2>3. Цели обработки</h2>
-      <ul>
-        <li>Обработка заявок школ и секций, обратная связь по сотрудничеству.</li>
-        <li>
-          Передача контактов родителя школе/секции, с которой согласован набор в конкретном районе, — чтобы
-          администратор школы мог позвонить и предложить запись на пробное занятие.
-        </li>
-        <li>Улучшение сайта: аналитика посещаемости и поведения на странице.</li>
-      </ul>
+        <h2>Цели обработки</h2>
+        <ul>
+          <li>Обработка заявок школ и&nbsp;секций, обратная связь по&nbsp;сотрудничеству.</li>
+          <li>
+            Передача контактов родителя школе или секции, с&nbsp;которой согласован набор в&nbsp;конкретном районе, — чтобы
+            администратор школы мог позвонить и&nbsp;предложить запись на&nbsp;пробное занятие.
+          </li>
+          <li>Улучшение сайта: аналитика посещаемости и&nbsp;поведения на&nbsp;странице.</li>
+        </ul>
 
-      <h2>4. Правовое основание обработки</h2>
-      <p>
-        Обработка выполняется на основании согласия субъекта персональных данных (ст. 6 Федерального закона от
-        27.07.2006 № 152-ФЗ «О персональных данных»). Заполняя форму на сайте, вы даёте согласие на обработку
-        указанных в ней данных. При личном сборе контактов родитель информируется о том, что данные передаются
-        школе для звонка по записи, и называет данные добровольно — это выражает согласие на обработку и передачу
-        именно этой школе.
-      </p>
-      <p>
-        Если ребёнок упоминается в разговоре — его имя и возраст называет родитель, а не сам ребёнок; эти данные
-        обрабатываются как часть данных семьи и только в объёме, необходимом администратору школы для записи
-        (имя и возраст, без сбора данных напрямую от несовершеннолетнего).
-      </p>
+        <h2>Правовое основание обработки</h2>
+        <p>
+          Обработка выполняется на&nbsp;основании согласия субъекта персональных данных (ст.&nbsp;6 Федерального закона
+          от&nbsp;27.07.2006 №&nbsp;152-ФЗ «О&nbsp;персональных данных»). Заполняя форму на&nbsp;сайте, вы даёте согласие
+          на&nbsp;обработку указанных в&nbsp;ней данных. При личном сборе контактов родитель знает, что данные передаются
+          школе для звонка по&nbsp;записи, и&nbsp;называет их добровольно — это выражает согласие на&nbsp;обработку и&nbsp;передачу
+          именно этой школе.
+        </p>
+        <p>
+          Если в&nbsp;разговоре упоминается ребёнок, его имя и&nbsp;возраст называет родитель, а&nbsp;не&nbsp;сам ребёнок. Эти
+          данные обрабатываются как часть данных семьи и&nbsp;только в&nbsp;объёме, нужном администратору школы для записи:
+          имя и&nbsp;возраст, без сбора данных напрямую от&nbsp;несовершеннолетнего.
+        </p>
 
-      <h2>5. Кому передаются данные</h2>
-      <ul>
-        <li>
-          <strong>Контакты родителей</strong> передаются исключительно той школе/секции, для которой они были
-          собраны, — в виде строки в её Google Таблице.
-        </li>
-        <li>
-          <strong>Заявки со страницы «Контакты»</strong> обрабатываются через сервис приёма форм
-          <strong>Formspree</strong> (Formspree, Inc., США) — данные формы передаются на серверы этого сервиса для
-          пересылки Оператору.
-        </li>
-        <li>
-          <strong>Яндекс.Метрика</strong> (ООО «Яндекс», Россия) обрабатывает технические данные о посещении сайта.
-        </li>
-      </ul>
-      <p>
-        Данные не продаются и не передаются каким-либо иным третьим лицам, кроме указанных выше, и не используются
-        для целей, не связанных с набором учеников школы.
-      </p>
+        <h2>Кому передаются данные</h2>
+        <ul>
+          <li>
+            <strong>Контакты родителей</strong> передаются только той школе или секции, для которой они были собраны, —
+            строкой в&nbsp;её Google Таблице.
+          </li>
+          <li>
+            <strong>Заявки из&nbsp;формы на&nbsp;сайте</strong> обрабатываются через сервис приёма форм
+            <strong>Formspree</strong> (Formspree, Inc., США): данные формы передаются на&nbsp;серверы этого сервиса
+            для пересылки Оператору.
+          </li>
+          <li>
+            <strong>Яндекс.Метрика</strong> (ООО «Яндекс», Россия) обрабатывает технические данные о&nbsp;посещении сайта.
+          </li>
+        </ul>
+        <p>
+          Данные не&nbsp;продаются, не&nbsp;передаются иным третьим лицам, кроме указанных выше, и&nbsp;не&nbsp;используются
+          для целей, не&nbsp;связанных с&nbsp;набором учеников школы.
+        </p>
 
-      <h2>6. Трансграничная передача данных</h2>
-      <p>
-        Поскольку Formspree — сервис с инфраструктурой за пределами РФ (США), передача данных формы заявки на сайте
-        технически является трансграничной передачей персональных данных. Заполняя форму, вы даёте согласие на такую
-        передачу. Если вы не хотите, чтобы ваши данные обрабатывались через зарубежный сервис, свяжитесь напрямую
-        через Telegram или WhatsApp, указанные на сайте, — форма для этого не обязательна.
-      </p>
+        <h2>Трансграничная передача данных</h2>
+        <p>
+          Formspree — сервис с&nbsp;инфраструктурой за&nbsp;пределами РФ (США), поэтому передача данных формы заявки
+          технически является трансграничной передачей персональных данных. Заполняя форму, вы даёте согласие на&nbsp;такую
+          передачу. Если вы не&nbsp;хотите, чтобы ваши данные обрабатывались через зарубежный сервис, напишите напрямую
+          в&nbsp;Telegram <a href="https://t.me/untilcold" target="_blank" rel="noopener">@untilcold</a> — форма для этого
+          не&nbsp;обязательна.
+        </p>
 
-      <h2>7. Срок хранения</h2>
-      <p>
-        Контакты родителей хранятся в таблице школы-получателя по её собственным правилам; Оператор хранит копию
-        переданных строк не дольше срока, разумно необходимого для урегулирования вопросов по конкретной партии
-        контактов (как правило, до конца сезона набора). Заявки с сайта хранятся до завершения переписки по
-        сотрудничеству и удаляются по запросу.
-      </p>
+        <h2>Срок хранения</h2>
+        <p>
+          Контакты родителей хранятся в&nbsp;таблице школы-получателя по&nbsp;её собственным правилам. Оператор хранит
+          копию переданных строк не&nbsp;дольше, чем разумно нужно для урегулирования вопросов по&nbsp;конкретной партии
+          контактов, — как правило, до&nbsp;конца сезона набора. Заявки с&nbsp;сайта хранятся до&nbsp;завершения переписки
+          о&nbsp;сотрудничестве и&nbsp;удаляются по&nbsp;запросу.
+        </p>
 
-      <h2>8. Ваши права</h2>
-      <p>Вы вправе:</p>
-      <ul>
-        <li>запросить, какие данные о вас обрабатываются;</li>
-        <li>потребовать исправить неточные данные;</li>
-        <li>отозвать согласие на обработку и потребовать удаления данных;</li>
-        <li>обратиться с жалобой в Роскомнадзор, если считаете, что права нарушены.</li>
-      </ul>
-      <p>Для реализации этих прав напишите в Telegram или WhatsApp, указанные в разделе «Контакты».</p>
+        <h2>Ваши права</h2>
+        <p>Вы вправе:</p>
+        <ul>
+          <li>запросить, какие данные о&nbsp;вас обрабатываются;</li>
+          <li>потребовать исправить неточные данные;</li>
+          <li>отозвать согласие на&nbsp;обработку и&nbsp;потребовать удаления данных;</li>
+          <li>обратиться с&nbsp;жалобой в&nbsp;Роскомнадзор, если считаете, что ваши права нарушены.</li>
+        </ul>
+        <p>Чтобы воспользоваться этими правами, напишите в&nbsp;Telegram — контакт в&nbsp;конце страницы.</p>
 
-      <h2>9. Cookie и счётчики</h2>
-      <p>
-        Сайт использует Яндекс.Метрику для аналитики посещаемости, включая функцию Вебвизор (запись сессий
-        посетителей). Поля формы заявки исключены из записи Вебвизора. Вы можете ограничить сбор данных счётчиком в
-        настройках браузера (блокировка cookie и JavaScript-трекеров) — это не помешает пользоваться сайтом.
-      </p>
+        <h2>Cookie и&nbsp;счётчики</h2>
+        <p>
+          Сайт использует Яндекс.Метрику для аналитики посещаемости, включая Вебвизор — запись сессий посетителей.
+          Поля формы заявки исключены из&nbsp;записи Вебвизора. Вы можете ограничить сбор данных счётчиком в&nbsp;настройках
+          браузера, заблокировав cookie и&nbsp;трекеры, — пользоваться сайтом это не&nbsp;помешает.
+        </p>
 
-      <h2>10. Меры защиты</h2>
-      <p>
-        Оператор принимает организационные меры для ограничения доступа к персональным данным: рабочие таблицы и
-        переписка с партнёрами доступны только Оператору и школе-получателю конкретной партии контактов.
-      </p>
+        <h2>Меры защиты</h2>
+        <p>
+          Оператор принимает организационные меры для ограничения доступа к&nbsp;персональным данным: рабочие таблицы
+          и&nbsp;переписка с&nbsp;партнёрами доступны только Оператору и&nbsp;школе-получателю конкретной партии контактов.
+        </p>
 
-      <h2>11. Изменение политики</h2>
-      <p>
-        Оператор может обновлять эту политику — актуальная версия всегда доступна на этой странице с указанием даты
-        вступления в силу.
-      </p>
+        <h2>Изменение политики</h2>
+        <p>
+          Оператор может обновлять эту политику. Актуальная версия всегда доступна на&nbsp;этой странице с&nbsp;датой
+          вступления в&nbsp;силу.
+        </p>
 
-      <h2>Контакты</h2>
-      <p>
-        Telegram: <a href="https://t.me/untilcold" target="_blank" rel="noopener">@untilcold</a><br />
-        WhatsApp: <a href="https://wa.me/79524817172" target="_blank" rel="noopener">+7 952 481 71 72</a>
-      </p>
+        <div class="legal-contact">
+          <h2>Как связаться</h2>
+          <p>Вопросы об&nbsp;обработке данных, отзыв согласия, удаление данных — в&nbsp;Telegram.</p>
+          <a class="btn" href="https://t.me/untilcold" target="_blank" rel="noopener">Написать в&nbsp;Telegram · @untilcold</a>
+        </div>
+      </article>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
+  <footer class="foot">
+    <div class="wrap foot-in">
+      <a class="logo" href="index.html"><img src="logo.svg" width="80" height="28" alt="" />Lead Fabric</a>
       <span>© <span id="year"></span> Lead Fabric · офлайн-маркетинг для детских школ</span>
       <a href="privacy-policy.html">Политика конфиденциальности</a>
       <a href="https://t.me/untilcold" target="_blank" rel="noopener">@untilcold</a>
