@@ -126,7 +126,7 @@ h2 { font-size: clamp(36px, 5vw, 72px); font-weight: 800; line-height: 1.02; let
   .top.is-open .nav-toggle span:first-child { transform: translateY(5px) rotate(45deg); }
   .top.is-open .nav-toggle span:last-child { transform: translateY(-5px) rotate(-45deg); }
 }
-@media (max-width: 520px) { .top-cta { display: none; } .top-in { gap: 12px; } }
+@media (max-width: 520px) { .top-cta { display: none; } .top-in { gap: 12px; } .top-cta + .nav-toggle { margin-left: auto; margin-right: -10px; } }
 
 /* ---------- первый экран ---------- */
 /* Первый экран без анимации появления: браузер запускает её не сразу,
