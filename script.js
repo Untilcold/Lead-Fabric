@@ -240,6 +240,146 @@
     });
   }
 
+  /* ==================================================================
+     ПРИЁМЫ (04.10.2026): живой фон из точек, набегающие цифры, бегущие
+     ленты, фраза с заливкой, плавающая панель. При «меньше движения»
+     в настройках телефона всё стоит на месте.
+     ================================================================== */
+
+  // 1. Живой фон из точек: сетка точек медленно «дышит» волной,
+  //    возле мыши точки крупнеют и светлеют. Холст рисуется, только пока виден.
+  document.querySelectorAll(".fx-dots").forEach((cv) => {
+    const ctx = cv.getContext("2d");
+    if (!ctx) return;
+    const STEP = 26;
+    let w = 0, h = 0, dpr = 1, visible = true, raf = 0;
+    let mx = -9999, my = -9999;
+    const host = cv.parentElement;
+    const size = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = host.clientWidth; h = host.clientHeight;
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    const draw = (time) => {
+      ctx.clearRect(0, 0, w, h);
+      const t = time / 1000;
+      for (let y = STEP / 2; y < h; y += STEP) {
+        for (let x = STEP / 2; x < w; x += STEP) {
+          const wave = 0.5 + 0.5 * Math.sin(x * 0.012 + y * 0.018 - t * 0.9);
+          const d = Math.hypot(x - mx, y - my);
+          const near = d < 160 ? 1 - d / 160 : 0;
+          const r = 1 + wave * 0.6 + near * 2.2;
+          ctx.fillStyle = `rgba(255,255,255,${(0.08 + wave * 0.1 + near * 0.55).toFixed(3)})`;
+          ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+    };
+    const loop = (time) => { draw(time); raf = visible ? requestAnimationFrame(loop) : 0; };
+    size();
+    window.addEventListener("resize", () => { size(); if (calmMotion.matches) draw(0); });
+    host.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse") return;
+      const r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top;
+    });
+    host.addEventListener("pointerleave", () => { mx = my = -9999; });
+    if (calmMotion.matches) { draw(0); return; }
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver((entries) => {
+        visible = entries[0].isIntersecting;
+        if (visible && !raf) raf = requestAnimationFrame(loop);
+      }).observe(host);
+    }
+    raf = requestAnimationFrame(loop);
+  });
+
+  // 2. Набегающие цифры: 0 → число, когда блок появился на экране. Хвост («+», « лет») остаётся.
+  const counters = document.querySelectorAll("[data-count]");
+  const runCount = (el) => {
+    const target = Number(el.dataset.count);
+    const tail = el.textContent.replace(/^[\d\s  ]*\d/, "");   // «+», « лет» — с пробелом
+    const fmt = (n) => Math.round(n).toLocaleString("ru-RU");
+    if (calmMotion.matches || !target) { el.textContent = fmt(target) + tail; return; }
+    const t0 = performance.now(), dur = 1400;
+    const tick = (now) => {
+      const k = Math.min(1, (now - t0) / dur);
+      el.textContent = fmt(target * (1 - Math.pow(1 - k, 3))) + tail;
+      if (k < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  if ("IntersectionObserver" in window) {
+    const countWatch = new IntersectionObserver((entries) => {
+      entries.forEach((en) => { if (en.isIntersecting) { runCount(en.target); countWatch.unobserve(en.target); } });
+    }, { threshold: 0.6 });
+    counters.forEach((el) => countWatch.observe(el));
+  }
+
+  // 3. Бегущие ленты: содержимое повторяется дважды — лента бесшовная.
+  document.querySelectorAll(".fx-row").forEach((row) => {
+    const track = row.querySelector(".fx-track");
+    if (!track) return;
+    const copy = track.cloneNode(true);
+    copy.setAttribute("aria-hidden", "true");
+    row.appendChild(copy);
+  });
+
+  // 4. Фраза с заливкой: каждое слово — в отдельной обёртке, светлеет по мере прокрутки.
+  document.querySelectorAll(".fx-fill").forEach((box) => {
+    const words = [];
+    const split = (node) => {
+      [...node.childNodes].forEach((ch) => {
+        if (ch.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          ch.textContent.split(/(\s+)/).forEach((part) => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+            const s = document.createElement("span");
+            s.className = "w"; s.textContent = part;
+            frag.appendChild(s); words.push(s);
+          });
+          ch.replaceWith(frag);
+        } else if (ch.nodeType === 1) split(ch);
+      });
+    };
+    split(box);
+    if (calmMotion.matches) return;
+    let queued = false;
+    const paint = () => {
+      queued = false;
+      const r = box.getBoundingClientRect();
+      // 0 — когда фраза входит снизу, 1 — когда она поднялась до середины экрана
+      const p = Math.min(1, Math.max(0, (window.innerHeight * 0.9 - r.top) / (window.innerHeight * 0.5)));
+      const lit = p * words.length;
+      words.forEach((wd, i) => wd.style.setProperty("--p", String(Math.min(1, Math.max(0, lit - i)))));
+    };
+    window.addEventListener("scroll", () => { if (!queued) { queued = true; requestAnimationFrame(paint); } }, { passive: true });
+    paint();
+  });
+
+  // 5. Плавающая панель на компьютере: после первого экрана, без контактов на экране, пока не закрыли.
+  const bar = document.getElementById("fx-bar");
+  if (bar && window.matchMedia("(min-width: 900px)").matches) {
+    let closed = false;
+    try { closed = sessionStorage.getItem("fx-bar-closed") === "1"; } catch (e) { /* без хранилища — просто показываем */ }
+    if (!closed) {
+      bar.hidden = false;
+      let nearEnd = false;
+      const contact = document.getElementById("contact");
+      const upd = () => bar.classList.toggle("is-on", window.scrollY > window.innerHeight * 0.9 && !nearEnd);
+      if (contact && "IntersectionObserver" in window) {
+        new IntersectionObserver((en) => { nearEnd = en[0].isIntersecting; upd(); }).observe(contact);
+      }
+      window.addEventListener("scroll", upd, { passive: true });
+      upd();
+      bar.querySelector(".fx-bar-x").addEventListener("click", () => {
+        bar.classList.remove("is-on");
+        try { sessionStorage.setItem("fx-bar-closed", "1"); } catch (e) { /* ничего */ }
+        window.setTimeout(() => { bar.hidden = true; }, 450);
+      });
+    }
+  }
+
   /* ------------------------------------------------------------------
      Калькулятор окупаемости партии
      ------------------------------------------------------------------ */

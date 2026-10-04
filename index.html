@@ -30,7 +30,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="favicon.svg" />
   <link rel="preload" href="fonts/manrope-cyrillic-800.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="styles.css?v=202610042332" />
+  <link rel="stylesheet" href="styles.css?v=202610042357" />
   <!-- Метка «скрипты работают»: блоки прячутся до появления на экране только
        при ней. Если скрипт не загрузится, страница останется видна целиком. -->
   <script>document.documentElement.classList.add("js");</script>
@@ -126,8 +126,9 @@
   <main id="top">
     <!-- ============ первый экран ============ -->
     <section class="hero f-blue" aria-label="Главный экран">
+      <canvas class="fx-dots" aria-hidden="true"></canvas>
       <div class="wrap hero-in">
-        <h1>Новые ученики из&nbsp;вашего района</h1>
+        <h1>Новые ученики из&nbsp;<span class="fx-sheen">вашего района</span></h1>
         <div class="hero-copy">
           <p class="hero-lead">Лично разговариваю с&nbsp;родителями рядом с&nbsp;вашей школой и&nbsp;передаю контакты тех, кому интересна запись. Москва и&nbsp;Санкт-Петербург.</p>
           <div class="actions">
@@ -135,9 +136,9 @@
             <a class="btn btn-line" href="https://wa.me/79524817172" target="_blank" rel="noopener">WhatsApp</a>
           </div>
           <ul class="stats">
-            <li><b>50+</b> школ</li>
-            <li><b>15 000+</b> контактов</li>
-            <li><b>6 лет</b> в наборе</li>
+            <li><b data-count="50">50+</b> школ</li>
+            <li><b data-count="15000">15 000+</b> контактов</li>
+            <li><b data-count="6">6 лет</b> в наборе</li>
           </ul>
         </div>
         <figure class="hero-sheet">
@@ -288,6 +289,8 @@
     <!-- ============ цена ============ -->
     <section class="sec f-ink" id="price">
       <div class="wrap">
+        <!-- фраза заливается цветом слово за словом, пока её листают -->
+        <p class="fx-fill">Реклама заканчивается вместе с&nbsp;бюджетом. Контакты родителей из&nbsp;вашего района <span class="acc">остаются у&nbsp;вас.</span></p>
         <h2 class="rv">Цена за&nbsp;контакт, без&nbsp;предоплаты</h2>
         <div class="price">
           <div class="price-main rv">
@@ -310,7 +313,7 @@
               <li><strong>Район накапливается</strong><span>Каждый выход добавляет семьи из&nbsp;тех&nbsp;же дворов — со&nbsp;временем у&nbsp;школы своя карта района.</span></li>
             </ul>
             <button class="proc-open" type="button" id="process-open" aria-expanded="false" aria-controls="process-pop">
-              <span class="proc-note">Реклама заканчивается вместе с&nbsp;бюджетом. Здесь после каждой партии у&nbsp;вас остаются данные.</span>
+              <span class="proc-note">После каждой партии у&nbsp;вас остаются данные, а&nbsp;не&nbsp;отчёт о&nbsp;показах.</span>
               <span class="proc-link">Посмотреть, как проходит сотрудничество<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
             </button>
 
@@ -531,6 +534,11 @@
           <p class="lead">Цитаты из&nbsp;реальных переписок.</p>
         </div>
         <!-- Каждый отзыв — отдельное окно переписки: сверху кто пишет, ниже сообщения -->
+        <!-- бегущие ленты: какие школы уже набирали учеников так -->
+        <div class="fx-marquee" aria-label="С кем работаю">
+          <div class="fx-row"><div class="fx-track"><span>Школы танцев</span><span>Балет</span><span>Единоборства</span><span>Английский язык</span><span>Детский фитнес</span><span>Модельная школа</span></div></div>
+          <div class="fx-row fx-rev"><div class="fx-track"><span>Развивающие центры</span><span>Спортивные клубы</span><span>Языковые школы</span><span>Школы танцев и спорта</span><span>Образовательные центры</span></div></div>
+        </div>
         <div class="reviews">
           <article class="review rv">
             <div class="review-head"><span class="ava" aria-hidden="true">Я</span><div><b>Языковая школа</b><span>Санкт-Петербург</span></div></div>
@@ -668,10 +676,17 @@
     </div>
   </footer>
 
+  <!-- плавающая панель на компьютере: появляется после первого экрана, прячется у контактов, закрывается крестиком -->
+  <div class="fx-bar" id="fx-bar" hidden>
+    <span class="fx-bar-text"><b>Пробная партия — 50 контактов.</b> Оплата после того, как вы обзвонили.</span>
+    <a class="btn btn-sm" href="https://t.me/untilcold" target="_blank" rel="noopener">Написать в Telegram</a>
+    <button class="fx-bar-x" type="button" aria-label="Скрыть"><span></span><span></span></button>
+  </div>
+
   <div class="mobile-cta" id="mobile-cta">
     <a class="btn" href="https://t.me/untilcold" target="_blank" rel="noopener">Написать в Telegram</a>
   </div>
 
-  <script src="script.js?v=202610042332"></script>
+  <script src="script.js?v=202610042357"></script>
 </body>
 </html>

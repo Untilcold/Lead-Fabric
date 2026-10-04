@@ -575,6 +575,68 @@ h2 { font-size: clamp(36px, 5vw, 72px); font-weight: 800; line-height: 1.02; let
 .js .rv { opacity: 0; transform: translateY(20px); transition: opacity .6s ease var(--d, 0s), transform .75s var(--ease-out) var(--d, 0s); }
 .js .rv.is-in { opacity: 1; transform: none; }
 
+/* ================= ПРИЁМЫ (набор «заморочек», 04.10.2026) =================
+   Живой фон из точек, блик по словам, набегающие цифры, бегущие ленты,
+   фраза с заливкой при прокрутке, плавающая панель на компьютере, шапка с размытием.
+   Всё честное: никаких поддельных курсоров «посетителей» и окон-ловушек. */
+
+/* 1. живой фон из точек — холст под первым экраном */
+.hero { position: relative; isolation: isolate; }
+.fx-dots { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
+
+/* 2. блик по словам: светлая полоса раз в несколько секунд пробегает по тексту */
+.fx-sheen {
+  background: linear-gradient(100deg, #ffffff 0%, #ffffff 40%, #bfdbfe 50%, #ffffff 60%, #ffffff 100%);
+  background-size: 250% 100%; background-position: 100% 0;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  animation: sheen 6s ease-in-out 1.2s infinite;
+}
+@keyframes sheen { 0% { background-position: 100% 0; } 35%, 100% { background-position: 0% 0; } }
+
+/* 3. набегающие цифры — без сдвига вёрстки */
+[data-count] { font-variant-numeric: tabular-nums; }
+
+/* 4. бегущие ленты в две стороны, при наведении замирают */
+.fx-marquee { display: grid; gap: 12px; margin-top: 44px; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.fx-row { display: flex; width: max-content; animation: marquee 48s linear infinite; }
+.fx-rev { animation-direction: reverse; animation-duration: 60s; }
+.fx-track { display: flex; gap: 12px; padding-right: 12px; }
+.fx-track span { display: inline-flex; align-items: center; gap: 12px; padding: 12px 20px; border: 1px solid rgba(255, 255, 255, 0.22); background: rgba(255, 255, 255, 0.06); color: var(--white); font-weight: 700; font-size: 16px; white-space: nowrap; }
+.fx-track span::before { content: ""; width: 28px; height: 12px; background: var(--brood); color: var(--sky); }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@media (hover: hover) and (pointer: fine) { .fx-marquee:hover .fx-row { animation-play-state: paused; } }
+
+/* 5. фраза с заливкой: слова светлеют по мере прокрутки (JS ставит --p от 0 до 1 каждому слову) */
+.fx-fill { max-width: 22em; margin-bottom: 72px; font-size: clamp(30px, 4.2vw, 60px); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; }
+.fx-fill .w { opacity: calc(0.22 + 0.78 * var(--p, 1)); transition: opacity .15s linear; }
+.f-ink .fx-fill .acc { color: var(--sky); }
+
+/* 6. плавающая панель на компьютере */
+.fx-bar {
+  position: fixed; left: 50%; bottom: 18px; z-index: 55; display: flex; align-items: center; gap: 18px;
+  padding: 10px 10px 10px 22px; background: var(--white); color: var(--ink); border: 1px solid var(--line);
+  box-shadow: 0 20px 50px -18px rgba(12, 26, 61, 0.45); transform: translate(-50%, 160%); transition: transform .4s var(--ease-out);
+}
+.fx-bar.is-on { transform: translate(-50%, 0); }
+.fx-bar[hidden] { display: none; }
+.fx-bar-text { font-size: 15px; white-space: nowrap; }
+.fx-bar .btn { flex: none; white-space: nowrap; }
+.fx-bar-x { position: relative; flex: none; width: 36px; height: 36px; border: 0; background: none; cursor: pointer; }
+.fx-bar-x span { position: absolute; left: 10px; right: 10px; top: 17px; height: 2px; background: var(--gray); transform: rotate(45deg); }
+.fx-bar-x span + span { transform: rotate(-45deg); }
+@media (max-width: 899px) { .fx-bar { display: none !important; } }
+
+/* 7. шапка с размытием — только на компьютере (на телефоне размытие тормозит прокрутку) */
+@media (hover: hover) and (pointer: fine) {
+  .top { background: rgba(255, 255, 255, 0.93); -webkit-backdrop-filter: saturate(1.4) blur(14px); backdrop-filter: saturate(1.4) blur(14px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-sheen { animation: none; -webkit-text-fill-color: currentColor; background: none; }
+  .fx-row { animation: none; }
+  .fx-fill .w { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
