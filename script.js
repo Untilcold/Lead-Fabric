@@ -141,10 +141,26 @@
 
     const stopAuto = () => way.classList.remove("is-auto");
 
+    // На телефоне карточка открытой остановки должна быть видна целиком: если она
+    // уходит под нижнюю кнопку Telegram, страница чуть подъезжает, ровно на нехватку.
+    // Остановки при этом не должны уехать под шапку.
+    const panelsBox = way.querySelector(".way-panels");
+    const lineBox = way.querySelector(".way-line");
+    const keepPanelInView = () => {
+      if (!panelsBox || !lineBox || window.innerWidth >= 900) return;
+      const bottom = panelsBox.getBoundingClientRect().bottom;
+      const limit = window.innerHeight - 96;
+      const headerH = header ? header.getBoundingClientRect().height : 72;
+      const room = lineBox.getBoundingClientRect().top - headerH - 4;
+      const by = Math.min(bottom - limit, room);
+      if (by > 0) window.scrollBy({ top: by, behavior: calmMotion.matches ? "auto" : "smooth" });
+    };
+
     stops.forEach((stop, i) => {
       stop.addEventListener("click", () => {
         stopAuto();
         show(i, false);
+        keepPanelInView();
       });
     });
 
