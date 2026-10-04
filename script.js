@@ -1,5 +1,5 @@
 (() => {
-  const header = document.querySelector(".site-header");
+  const header = document.querySelector(".top");
   const toggle = document.querySelector(".nav-toggle");
   const year = document.getElementById("year");
 
@@ -7,12 +7,14 @@
     year.textContent = String(new Date().getFullYear());
   }
 
+  /* ------------------------------------------------------------------
+     Шапка и плавающая кнопка Telegram на телефоне.
+     Близость блока контактов считает наблюдатель, а не замер на каждом кадре:
+     getBoundingClientRect во время прокрутки заставляет браузер пересчитывать
+     вёрстку. Классы трогаем только когда состояние реально поменялось.
+     ------------------------------------------------------------------ */
   const mobileCta = document.getElementById("mobile-cta");
   const contactSection = document.getElementById("contact");
-
-  // Близость блока контактов считает наблюдатель, а не замер на каждом кадре:
-  // getBoundingClientRect во время прокрутки заставляет браузер пересчитывать
-  // вёрстку. Классы трогаем только когда состояние реально поменялось.
   let nearContact = false;
   let wasScrolled = null;
   let wasVisible = null;
@@ -24,9 +26,7 @@
       header.classList.toggle("is-scrolled", scrolled);
       wasScrolled = scrolled;
     }
-
     if (!mobileCta) return;
-
     const showAfterHero = window.scrollY > 280;
     if (showAfterHero !== wasVisible) {
       mobileCta.classList.toggle("is-visible", showAfterHero);
@@ -51,222 +51,182 @@
     contactObserver.observe(contactSection);
   }
 
-  // Обработчик читает геометрию страницы. Без ограничения он делал это на
-  // каждое событие прокрутки — во встроенном браузере Telegram это заметно
-  // подтормаживало скролл. Теперь не чаще одного раза на кадр.
+  // Не чаще одного раза на кадр — во встроенном браузере Telegram
+  // обработчик на каждое событие прокрутки заметно тормозил скролл.
   let scrollQueued = false;
-  const onScrollThrottled = () => {
-    if (scrollQueued) return;
-    scrollQueued = true;
-    requestAnimationFrame(() => {
-      scrollQueued = false;
-      onScroll();
-    });
-  };
-
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (scrollQueued) return;
+      scrollQueued = true;
+      requestAnimationFrame(() => {
+        scrollQueued = false;
+        onScroll();
+      });
+    },
+    { passive: true }
+  );
   onScroll();
-  window.addEventListener("scroll", onScrollThrottled, { passive: true });
 
   if (toggle && header) {
     toggle.addEventListener("click", () => {
       const open = header.classList.toggle("is-open");
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.setAttribute("aria-label", open ? "Закрыть меню" : "Открыть меню");
     });
-
     header.querySelectorAll(".nav a").forEach((link) => {
       link.addEventListener("click", () => {
         header.classList.remove("is-open");
         toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "Открыть меню");
       });
     });
   }
 
-  const revealItems = document.querySelectorAll(".reveal");
+  const calmMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  /* ------------------------------------------------------------------
+     Появление блоков при прокрутке: класс is-in ставится один раз,
+     когда блок доходит до экрана.
+     ------------------------------------------------------------------ */
+  const revealItems = document.querySelectorAll(".rv");
   if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver(
+    const revealer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-in");
+          revealer.unobserve(entry.target);
         });
       },
-      { threshold: 0.16, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
     );
-    revealItems.forEach((item) => observer.observe(item));
+    revealItems.forEach((item) => revealer.observe(item));
   } else {
-    revealItems.forEach((item) => item.classList.add("is-visible"));
+    revealItems.forEach((item) => item.classList.add("is-in"));
   }
 
-  /* Channel tabs */
-  const tabsList = document.querySelector(".channel-tabs");
-  const tabs = Array.from(document.querySelectorAll(".channel-tab"));
-  const panels = Array.from(document.querySelectorAll(".channel-panel"));
+  /* ------------------------------------------------------------------
+     «Как работает»: остановки маршрута — вкладки. Утка идёт к выбранной
+     остановке, назад — разворачивается. Пока блок на экране и его не трогали,
+     маршрут идёт сам: следующая остановка — когда дорисуется полоска отсчёта
+     под текущей. Нажатие, касание или клавиши выключают это насовсем.
+     ------------------------------------------------------------------ */
+  const way = document.getElementById("way");
+  if (way) {
+    const stops = Array.from(way.querySelectorAll(".way-stop"));
+    const panels = Array.from(way.querySelectorAll(".way-panel"));
+    let current = stops.findIndex((stop) => stop.classList.contains("is-active"));
+    let walkTimer = null;
+    if (current < 0) current = 0;
 
-  /** Держит активную вкладку в видимой части ленты, не двигая саму страницу.
-   *  Плавно — только по нажатию: программная плавная прокрутка во время
-   *  жеста пальцем перебивает скролл страницы. */
-  const centerTab = (tab, smooth) => {
-    if (!tabsList || tabsList.scrollWidth <= tabsList.clientWidth) return;
-    const left = tab.offsetLeft - (tabsList.clientWidth - tab.offsetWidth) / 2;
-    tabsList.scrollTo({ left: Math.max(0, left), behavior: smooth ? "smooth" : "auto" });
-  };
-
-  const activateTab = (tab, smooth) => {
-    const id = tab.getAttribute("data-tab");
-    tabs.forEach((t) => {
-      t.classList.toggle("is-active", t === tab);
-      t.setAttribute("aria-selected", t === tab ? "true" : "false");
-    });
-    panels.forEach((panel) => {
-      const active = panel.getAttribute("data-panel") === id;
-      panel.classList.toggle("is-active", active);
-      panel.hidden = !active;
-    });
-    centerTab(tab, smooth);
-  };
-
-  /* Автопрокрутка вкладок на узких экранах: пять этапов показываются сами,
-     листать страницу вверх-вниз не нужно. Первое касание её выключает. */
-  if (tabsList && tabs.length) {
-    const DWELL = 5200;
-    const narrow = window.matchMedia("(max-width: 900px)");
-    const calmMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let timer = null;
-    let inView = false;
-    let userTook = false;
-    let fingerDown = false;
-
-    // Пока палец на экране, вкладки не переключаются: смена панели во время
-    // жеста вызывает пересчёт вёрстки и скролл начинает спотыкаться.
-    window.addEventListener("touchstart", () => { fingerDown = true; }, { passive: true });
-    window.addEventListener("touchend", () => { fingerDown = false; }, { passive: true });
-    window.addEventListener("touchcancel", () => { fingerDown = false; }, { passive: true });
-
-    const stopAuto = () => {
-      if (timer) clearInterval(timer);
-      timer = null;
-      tabsList.classList.remove("is-auto");
+    const show = (index, focus) => {
+      if (index === current) return;
+      way.classList.toggle("is-back", index < current);
+      way.classList.add("is-walking");
+      window.clearTimeout(walkTimer);
+      walkTimer = window.setTimeout(() => way.classList.remove("is-walking", "is-back"), 820);
+      current = index;
+      way.style.setProperty("--i", String(index));
+      stops.forEach((stop, i) => {
+        const active = i === index;
+        stop.classList.toggle("is-active", active);
+        stop.classList.toggle("is-done", i < index);
+        stop.setAttribute("aria-selected", active ? "true" : "false");
+        stop.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach((panel, i) => panel.classList.toggle("is-active", i === index));
+      if (focus) stops[index].focus();
     };
 
-    const startAuto = () => {
-      if (timer || userTook || !inView || !narrow.matches || calmMotion.matches) return;
-      tabsList.classList.add("is-auto");
-      timer = setInterval(() => {
-        if (fingerDown) return;
-        const current = tabs.findIndex((t) => t.classList.contains("is-active"));
-        activateTab(tabs[(current + 1) % tabs.length], false);
-      }, DWELL);
-    };
+    const stopAuto = () => way.classList.remove("is-auto");
 
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        userTook = true;
+    stops.forEach((stop, i) => {
+      stop.addEventListener("click", () => {
         stopAuto();
-        activateTab(tab, true);
+        show(i, false);
       });
     });
 
-    tabsList.addEventListener("touchstart", () => {
-      userTook = true;
+    // Стрелки, Home и End — как в любых вкладках
+    way.querySelector(".way-line").addEventListener("keydown", (event) => {
+      const last = stops.length - 1;
+      let next = null;
+      if (event.key === "ArrowRight") next = current === last ? 0 : current + 1;
+      else if (event.key === "ArrowLeft") next = current === 0 ? last : current - 1;
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = last;
+      if (next === null) return;
+      event.preventDefault();
       stopAuto();
-    }, { passive: true });
-
-    if ("IntersectionObserver" in window) {
-      const tabsObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            inView = entry.isIntersecting;
-            if (inView) startAuto();
-            else stopAuto();
-          });
-        },
-        { threshold: 0.3 }
-      );
-      tabsObserver.observe(tabsList);
-    }
-
-    narrow.addEventListener("change", () => {
-      stopAuto();
-      startAuto();
+      show(next, true);
     });
-  } else {
-    tabs.forEach((tab) => tab.addEventListener("click", () => activateTab(tab, true)));
+
+    way.querySelector(".way-line").addEventListener("touchstart", stopAuto, { passive: true });
+
+    // Полоска отсчёта дорисовалась — идём к следующей остановке
+    way.addEventListener("animationend", (event) => {
+      if (!event.target.classList.contains("way-bar")) return;
+      if (!way.classList.contains("is-auto")) return;
+      show((current + 1) % stops.length, false);
+    });
+
+    if (!calmMotion.matches && "IntersectionObserver" in window) {
+      way.classList.add("is-auto", "is-paused");
+      const wayWatcher = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => way.classList.toggle("is-paused", !entry.isIntersecting));
+        },
+        { threshold: 0.35 }
+      );
+      wayWatcher.observe(way);
+    }
   }
 
-  /* Benefits split-in + flip cards */
-  const benefitsSection = document.getElementById("benefits");
-  if (benefitsSection) {
+  /* ------------------------------------------------------------------
+     Карточки «Почему удобно»: поднимаются по очереди, когда блок доходит
+     до экрана. С мышью поворачиваются при наведении (это делает CSS),
+     на тач-экране — по нажатию.
+     ------------------------------------------------------------------ */
+  const flips = document.getElementById("flips");
+  if (flips) {
+    const settle = () => window.setTimeout(() => flips.classList.add("is-settled"), 1200);
     if ("IntersectionObserver" in window) {
-      const splitObserver = new IntersectionObserver(
+      const flipsWatcher = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              benefitsSection.classList.add("is-split");
-              splitObserver.disconnect();
-            }
+            if (!entry.isIntersecting) return;
+            flips.classList.add("is-in");
+            settle();
+            flipsWatcher.disconnect();
           });
         },
-        { threshold: 0.28 }
+        { threshold: 0.2 }
       );
-      splitObserver.observe(benefitsSection);
+      flipsWatcher.observe(flips);
     } else {
-      benefitsSection.classList.add("is-split");
+      flips.classList.add("is-in", "is-settled");
     }
+
+    // Смотрим, чем нажали: у ноутбуков с сенсорным экраном есть и мышь,
+    // и палец, одного медиазапроса для них мало.
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    flips.querySelectorAll(".flip").forEach((card) => {
+      let pointer = "";
+      card.addEventListener("pointerdown", (event) => { pointer = event.pointerType; });
+      card.addEventListener("click", () => {
+        const byMouse = pointer ? pointer === "mouse" : finePointer.matches;
+        pointer = "";
+        if (byMouse) return;
+        const flipped = card.classList.toggle("is-flipped");
+        card.setAttribute("aria-pressed", flipped ? "true" : "false");
+      });
+    });
   }
 
-  document.querySelectorAll(".flip-card").forEach((card) => {
-    card.addEventListener("click", () => {
-      const fineHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-      if (fineHover) return;
-      card.classList.toggle("is-flipped");
-    });
-  });
-
-  /* Точки под каруселями преимуществ и отзывов (видны только на узких экранах) */
-  const buildDots = (gridId, dotsId, itemSelector, label) => {
-    const grid = document.getElementById(gridId);
-    const dotsBox = document.getElementById(dotsId);
-    if (!grid || !dotsBox) return;
-
-    const cards = Array.from(grid.querySelectorAll(itemSelector));
-    const dots = cards.map((card, index) => {
-      const dot = document.createElement("button");
-      dot.type = "button";
-      dot.className = "flip-dot" + (index === 0 ? " is-active" : "");
-      dot.setAttribute("aria-label", `${label} ${index + 1}`);
-      dot.addEventListener("click", () => {
-        const shift = card.getBoundingClientRect().left - grid.getBoundingClientRect().left;
-        grid.scrollTo({ left: grid.scrollLeft + shift - 16, behavior: "smooth" });
-      });
-      dotsBox.appendChild(dot);
-      return dot;
-    });
-
-    const syncDots = () => {
-      const box = grid.getBoundingClientRect();
-      const middle = box.left + box.width / 2;
-      let nearest = 0;
-      let best = Infinity;
-      cards.forEach((card, index) => {
-        const rect = card.getBoundingClientRect();
-        const distance = Math.abs(rect.left + rect.width / 2 - middle);
-        if (distance < best) {
-          best = distance;
-          nearest = index;
-        }
-      });
-      dots.forEach((dot, index) => dot.classList.toggle("is-active", index === nearest));
-    };
-
-    grid.addEventListener("scroll", syncDots, { passive: true });
-  };
-
-  buildDots("benefits-grid", "benefits-dots", ".flip-card", "Преимущество");
-  buildDots("review-grid", "review-dots", ".review-card", "Отзыв");
-
-  /* Калькулятор окупаемости партии */
+  /* ------------------------------------------------------------------
+     Калькулятор окупаемости партии
+     ------------------------------------------------------------------ */
   const calc = document.getElementById("calc");
   if (calc) {
     const inputs = {
@@ -284,9 +244,7 @@
       cta: document.getElementById("calc-cta"),
     };
 
-    const rub = (value) =>
-      `${Math.round(value).toLocaleString("ru-RU")} <span class="rub">₽</span>`;
-
+    const rub = (value) => `${Math.round(value).toLocaleString("ru-RU")} <span class="rub">₽</span>`;
     const read = (el, fallback) => {
       const value = Number(el && el.value);
       return Number.isFinite(value) && value > 0 ? value : fallback;
@@ -297,14 +255,9 @@
       const tail = n % 100;
       if (tail >= 11 && tail <= 14) return "учеников окупают";
       switch (n % 10) {
-        case 1:
-          return "ученик окупает";
-        case 2:
-        case 3:
-        case 4:
-          return "ученика окупают";
-        default:
-          return "учеников окупают";
+        case 1: return "ученик окупает";
+        case 2: case 3: case 4: return "ученика окупают";
+        default: return "учеников окупают";
       }
     };
 
@@ -313,14 +266,9 @@
       const tail = n % 100;
       if (tail >= 11 && tail <= 14) return "контактов";
       switch (n % 10) {
-        case 1:
-          return "контакт";
-        case 2:
-        case 3:
-        case 4:
-          return "контакта";
-        default:
-          return "контактов";
+        case 1: return "контакт";
+        case 2: case 3: case 4: return "контакта";
+        default: return "контактов";
       }
     };
 
@@ -347,9 +295,7 @@
         const rounded = share < 10 ? Math.round(share * 10) / 10 : Math.round(share);
         out.percent.textContent = `${String(rounded).replace(".", ",")}%`;
       }
-      if (out.cta) {
-        out.cta.textContent = `Обсудить партию на ${contacts} ${contactsWord(contacts)}`;
-      }
+      if (out.cta) out.cta.textContent = `Обсудить партию на ${contacts} ${contactsWord(contacts)}`;
     };
 
     Object.values(inputs).forEach((el) => {
@@ -358,7 +304,9 @@
     recalc();
   }
 
-  /* Form */
+  /* ------------------------------------------------------------------
+     Заявка: отправка в Formspree без перехода со страницы
+     ------------------------------------------------------------------ */
   const form = document.getElementById("lead-form");
   const status = document.getElementById("form-status");
   if (form && status) {
@@ -377,7 +325,6 @@
           body: new FormData(form),
           headers: { Accept: "application/json" },
         });
-
         if (response.ok) {
           form.reset();
           ymGoal("form_send");
@@ -396,21 +343,26 @@
     });
   }
 
-  /* Всплывающая панель «Сотрудничество» поверх белой карточки в блоке цены.
-     Отдельной секции на странице больше нет — она открывается кнопкой. */
+  /* ------------------------------------------------------------------
+     Панель «Как проходит работа» поверх блока цены.
+     Отдельной секции нет — она открывается кнопкой и пунктом меню.
+     ------------------------------------------------------------------ */
   const processPop = document.getElementById("process-pop");
   const processOpen = document.getElementById("process-open");
-
   if (processPop && processOpen) {
     const closeBtn = processPop.querySelector(".process-pop-close");
+    let processOpened = false;
 
     const openPop = () => {
       if (!processPop.hidden) return;
       processPop.hidden = false;
       processOpen.setAttribute("aria-expanded", "true");
       if (closeBtn) closeBtn.focus({ preventScroll: true });
+      if (!processOpened) {
+        processOpened = true;
+        ymGoal("process_open");
+      }
     };
-
     const closePop = (returnFocus) => {
       if (processPop.hidden) return;
       processPop.hidden = true;
@@ -420,23 +372,19 @@
 
     processOpen.addEventListener("click", openPop);
     if (closeBtn) closeBtn.addEventListener("click", () => closePop(true));
-
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closePop(true);
     });
-
     // Клик мимо панели закрывает её — привычное поведение всплывающего окна
     document.addEventListener("click", (event) => {
       if (processPop.hidden) return;
       if (processPop.contains(event.target) || processOpen.contains(event.target)) return;
+      if (event.target.closest && event.target.closest("[data-open-process]")) return;
       closePop(false);
     });
-
     // Пункт меню «Сотрудничество» ведёт к цене и сразу раскрывает панель
     document.querySelectorAll("[data-open-process]").forEach((link) => {
-      link.addEventListener("click", () => {
-        window.setTimeout(openPop, 420);
-      });
+      link.addEventListener("click", () => window.setTimeout(openPop, 420));
     });
   }
 
@@ -470,16 +418,6 @@
       ymGoal("calc_use");
     });
   });
-
-  const openProcessBtn = document.getElementById("process-open");
-  if (openProcessBtn) {
-    let processOpened = false;
-    openProcessBtn.addEventListener("click", () => {
-      if (processOpened) return;
-      processOpened = true;
-      ymGoal("process_open");
-    });
-  }
 
   // Долистал до цены — граница между «посмотрел» и «выбирает»
   const priceSection = document.getElementById("price");
