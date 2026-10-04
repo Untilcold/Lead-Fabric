@@ -59,6 +59,8 @@ button { font: inherit; color: inherit; }
 .sec--line { border-top: 1px solid var(--line); }
 .f-blue { background-color: var(--blue); background-image: var(--grad-blue); color: var(--white); }
 .f-ink { background-color: var(--ink); background-image: var(--grad-ink); color: var(--white); }
+/* светло-голубое поле — мягкий переход между синим и белым (по просьбе Назара 04.10) */
+.f-sky { background-color: #eef4ff; background-image: radial-gradient(ellipse 70% 60% at 88% 8%, rgba(96, 165, 250, 0.18), transparent 60%), linear-gradient(180deg, #f3f7ff 0%, #e6efff 100%); }
 
 h2 { font-size: clamp(36px, 5vw, 72px); font-weight: 800; line-height: 1.02; letter-spacing: -0.03em; max-width: 15em; }
 .lead { font-size: clamp(17px, 1.5vw, 20px); line-height: 1.5; color: var(--gray); max-width: 620px; margin-top: 22px; }
@@ -146,8 +148,7 @@ h2 { font-size: clamp(36px, 5vw, 72px); font-weight: 800; line-height: 1.02; let
 .hero-sheet { position: relative; z-index: 2; margin-bottom: -96px; }
 .hero-sheet .shot { box-shadow: 0 34px 70px -24px rgba(2, 6, 23, 0.6), 0 2px 6px rgba(2, 6, 23, 0.12); }
 .hero-sheet img { width: 100%; }
-/* подпись лежит уже на тёмном поле «Как работает» */
-.hero-sheet figcaption { position: absolute; left: 0; top: 100%; margin-top: 12px; font-size: 14px; color: rgba(255, 255, 255, 0.66); }
+.hero-sheet figcaption { position: absolute; left: 0; top: 100%; margin-top: 12px; font-size: 14px; color: var(--gray); }
 @media (min-width: 1000px) {
   .hero { padding-top: 80px; }
   .hero-in { grid-template-columns: 5fr 6fr; grid-template-areas: "h h" "c s"; gap: 44px 56px; }
